@@ -1,26 +1,19 @@
 {
   "name": "azaas-platform-frontend",
   "version": "0.1.0",
-  "description": "Frontend for AzaaS Platform",
   "private": true,
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/AzaaS-Platform/frontend.git"
-  },
-  "contributors": ["Adam Stafiej", "Maciej Stanuch", "Konrad Sztenderski"],
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/AzaaS-Platform/frontend/issues"
-  },
-  "homepage": "https://github.com/AzaaS-Platform/frontend#readme",
+  "description": "Frontend for AzaaS Platform",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "deploy": "vue-cli-service s3-deploy"
   },
   "dependencies": {
     "core-js": "^3.6.4",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-cli-plugin-s3-deploy": "^4.0.0-rc3",
+    "yarn": "^1.22.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.2.0",
@@ -48,5 +41,19 @@
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/AzaaS-Platform/frontend/issues"
+  },
+  "contributors": [
+    "Adam Stafiej",
+    "Maciej Stanuch",
+    "Konrad Sztenderski"
+  ],
+  "homepage": "https://github.com/AzaaS-Platform/frontend#readme",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AzaaS-Platform/frontend.git"
+  }
 }
