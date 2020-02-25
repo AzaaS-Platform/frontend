@@ -1,0 +1,17 @@
+name: deploy-frontend
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy-frontend:
+    name: deploy-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: install
+        run: npm install
+      - name: build
+        run: npm run-script build
+      - name: deploy
+        run: npm run-script deploy
