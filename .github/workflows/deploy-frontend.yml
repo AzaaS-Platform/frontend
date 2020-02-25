@@ -7,11 +7,22 @@ on:
 jobs:
   deploy-frontend:
     name: deploy-frontend
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
     runs-on: ubuntu-latest
+    env:
+      CI: true
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
     steps:
-      - name: install
-        run: npm install
-      - name: build
-        run: npm run-script build
-      - name: deploy
-        run: npm run-script deploy
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      - run: npm run-script build
+      - run: npm run-script deploy
