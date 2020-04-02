@@ -20,7 +20,6 @@
         props: {
             headers: Array,
             data: Array,
-            title: String
         }
     }
 </script>

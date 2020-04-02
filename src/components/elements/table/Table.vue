@@ -1,11 +1,11 @@
 <template>
     <div>
         <div class="mdl-layout">
-            <DataTable :data="currTable" :headers="table.headers" title="Użytkownicy"/>
+            <DataTable :data="currTable" :headers="table.headers" />
         </div>
         <div class="mdl-grid">
             <div class="mdl-layout-spacer"></div>
-            <Pagination />
+            <Pagination :pages-num="Math.ceil(table.content.length / maxRows)" :curr-page="page" />
             <div class="mdl-layout-spacer"></div>
         </div>
     </div>
@@ -18,7 +18,11 @@
         name: "Table",
         components: {Pagination, DataTable},
         props: {
-            table: Object
+            table: Object,
+            maxRows: {
+                type: Number,
+                default: 5
+            },
         },
         data() {
             return {
@@ -27,7 +31,7 @@
         },
         computed: {
             currTable() {
-                return this.table.content.slice(this.page * 5, this.page * 5 + 5);
+                return this.table.content.slice(this.page * this.maxRows, this.page * this.maxRows + this.maxRows);
             }
         },
         watch: {

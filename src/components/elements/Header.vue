@@ -19,6 +19,7 @@
             button: {
                 text: String,
                 icon: String,
+                link: String,
             }
         },
         data() {
@@ -28,16 +29,7 @@
         },
         methods: {
             buttonClicked() {
-                this.showAddUser = !this.showAddUser;
-                if(this.showAddUser) {
-                    this.button.text = 'Lista użytkowników';
-                    this.button.icon = 'arrow_back';
-                    this.$router.push('/add-user')
-                } else {
-                    this.button.text = 'Dodaj użytkownika';
-                    this.button.icon = 'add';
-                    this.$router.push('/')
-                }
+                this.$router.push(this.button.link)
             }
         }
     }
