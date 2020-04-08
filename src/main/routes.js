@@ -9,10 +9,10 @@ export default [
     { path: '/add-role', component: AddRole },
     { path: '/role/:id', component: Role },
     { path: '/roles/:page', component: Roles },
-    { path: '/roles', redirect: '/roles/0' },
+    { path: '/roles', redirect: '/roles/1' },
     { path: '/add-user', component: AddUser },
     { path: '/user/:id', component: User },
     { path: '/users/:page', component: Users },
-    { path: '/users', redirect: '/users/0' },
+    { path: '/users', redirect: '/users/1' },
     { path: '/', redirect: '/users' },
 ]

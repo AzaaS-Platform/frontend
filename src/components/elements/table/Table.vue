@@ -26,17 +26,17 @@
         },
         data() {
             return {
-                page: parseInt(this.$route.params.page) || 0,
+                page: parseInt(this.$route.params.page) || 1,
             }
         },
         computed: {
             currTable() {
-                return this.table.content.slice(this.page * this.maxRows, this.page * this.maxRows + this.maxRows);
-            }
+                return this.table.content.slice((this.page - 1) * this.maxRows, (this.page - 1) * this.maxRows + this.maxRows);
+            },
         },
         watch: {
             $route() {
-                this.page = parseInt(this.$route.params.page) || 0;
+                this.page = parseInt(this.$route.params.page) || 1;
             }
         }
     }
