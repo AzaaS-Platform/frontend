@@ -3,9 +3,9 @@
 </template>
 
 <script>
-    import Users from "../../main/Users.js";
+    import Users from "../../../main/Users.js";
 
-    import Table from "../elements/table/Table.vue";
+    import Table from "../../elements/table/Table.vue";
 
     export default {
         name: "Users",
