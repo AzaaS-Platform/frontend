@@ -1,6 +1,6 @@
 <template>
     <div class="flex-center">
-        <Header>
+        <Header mb-href="/users" bb-href="/roles">
             <template #main-button>Użytkownicy</template>
             <template #back-button>Role</template>
         </Header>

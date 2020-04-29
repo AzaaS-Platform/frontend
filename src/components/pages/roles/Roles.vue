@@ -1,29 +1,18 @@
 <template>
     <main class="mdl-layout__content">
-        <Header>
+        <Header mb-href="/users" bb-href="/add-role">
             <template #main-button>Użytkownicy</template>
-            <template #back-button>Role</template>
+            <template #back-button>Dodaj Role</template>
         </Header>
-        <div class="mdl-layout">
-            <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-                <thead>
-                <tr>
-                    <th v-for="header in table.headers" :key="header" class="mdl-data-table__cell--non-numeric">{{header}}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <router-link v-for="row in currTable" :to="`../edit-role/${row.id}`" :key="row.id" tag="tr" class="cursor-pointer">
+        <Table :headers="table.headers" :rows="table.rows">
+            <template #header="{header}">{{header}}</template>
+            <template #row="{row}">
+                <router-link :to="`../edit-role/${row.id}`" tag="tr" class="cursor-pointer">
                     <td class="mdl-data-table__cell--non-numeric">{{row.name}}</td>
                     <td class="mdl-data-table__cell--non-numeric">{{row.permissions.join(', ')}}</td>
                 </router-link>
-                </tbody>
-            </table>
-        </div>
-        <div class="mdl-grid">
-            <div class="mdl-layout-spacer"></div>
-            <Pagination :pages-num="Math.ceil(table.content.length / maxRows)" :curr-page="page" />
-            <div class="mdl-layout-spacer"></div>
-        </div>
+            </template>
+        </Table>
     </main>
 </template>
 
@@ -31,27 +20,20 @@
     import Roles from "../../../main/Roles.js";
 
     import Header from "../../elements/Header.vue";
-    import Pagination from "../../elements/table/Pagination.vue";
+    import Table from "../../elements/table/Table.vue";
 
     export default {
         name: "Roles",
-        components: {Pagination, Header},
+        components: {Table, Header},
         data() {
             return {
                 table: {
                     headers: [
                         'Nazwa roli', 'Uprawnienia'
                     ],
-                    content: Roles.fetch(),
+                    rows: Roles.fetch(),
                 },
-                maxRows: 5,
             }
-        },
-        computed: {
-            page() { return parseInt(this.$route.params.page) || 1 },
-            currTable() {
-                return this.table.content.slice((this.page - 1) * this.maxRows, (this.page - 1) * this.maxRows + this.maxRows);
-            },
         },
     }
 </script>
