@@ -16,18 +16,3 @@ new Vue({
   router,
   render: h => h(App),
 }).$mount('#app');
-/*
-const router = new VueRouter({
-  mode: 'history',
-  base: __dirname,
-  routes: [
-    { path: '/', component: Table },
-    { path: '/test', component: AddUser },
-  ]
-});
-
-new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app');
-*/
