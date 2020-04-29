@@ -6,13 +6,13 @@
         </Header>
         <form @submit="submitForm" class="form-container">
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input class="mdl-textfield__input" type="text" id="name" :value="name">
+                <input class="mdl-textfield__input" type="text" id="name" v-model="roleName">
                 <label class="mdl-textfield__label" for="name">Nazwa roli...</label>
             </div>
             <div>
                 <div v-for="permission of permissions" :key="permission" class="privilege-box">
                     <div class="text">{{permission}}</div>
-                    <button @click="removePrivilege(permission)" type="button" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
+                    <button @click="removePermission(permission)" type="button" class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored">
                         <i class="material-icons">delete</i>
                     </button>
                 </div>
@@ -51,6 +51,7 @@
         },
         data() {
             return {
+                roleName: this.name,
                 permission: '',
             }
         },
@@ -64,7 +65,7 @@
                     this.permissions.push(this.permission);
                 }
             },
-            removePrivilege(privilege) {
+            removePermission(privilege) {
                 this.permissions.splice(this.permissions.indexOf(privilege), 1);
             },
         },

@@ -1,6 +1,8 @@
 <template>
     <AddRole v-if="role !== null" :name="role.name" :permissions="role.permissions" />
-    <div v-else>Rola o podanym id nie istnieje</div>
+    <div v-else class="mdl-grid">
+        <div>Rola o podanym id nie istnieje</div>
+    </div>
 </template>
 
 <script>
