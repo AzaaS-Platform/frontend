@@ -1,6 +1,9 @@
 <template>
     <main class="mdl-layout__content">
-        <Header :button="button"/>
+        <Header>
+            <template #main-button>Użytkownicy</template>
+            <template #back-button>Role</template>
+        </Header>
         <div class="mdl-layout">
             <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
                 <thead>
@@ -9,9 +12,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                <router-link v-for="row in currTable" :to="`../role/${row.id}`" :key="row.id" tag="tr" class="cursor-pointer">
+                <router-link v-for="row in currTable" :to="`../edit-role/${row.id}`" :key="row.id" tag="tr" class="cursor-pointer">
                     <td class="mdl-data-table__cell--non-numeric">{{row.name}}</td>
-                    <td class="mdl-data-table__cell--non-numeric">{{row.privileges.join(', ')}}</td>
+                    <td class="mdl-data-table__cell--non-numeric">{{row.permissions.join(', ')}}</td>
                 </router-link>
                 </tbody>
             </table>
@@ -42,11 +45,6 @@
                     content: Roles.fetch(),
                 },
                 maxRows: 5,
-                button: {
-                    text: 'Dodaj rolę',
-                    icon: 'add',
-                    link: '/add-role'
-                },
             }
         },
         computed: {

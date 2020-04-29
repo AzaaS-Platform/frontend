@@ -1,5 +1,5 @@
 <template>
-    <AddRole v-if="role !== null" :name="role.name" :privileges="role.privileges" />
+    <AddRole v-if="role !== null" :name="role.name" :permissions="role.permissions" />
     <div v-else>Rola o podanym id nie istnieje</div>
 </template>
 

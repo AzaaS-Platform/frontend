@@ -2,11 +2,11 @@
     <div class="mdl-grid">
         <div class="mdl-layout-spacer"></div>
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--white">
-            Role
+            <slot name="main-button" />
         </button>
-        <button @click="buttonClicked" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
-            <i class="material-icons">{{button.icon}}</i>
-            {{button.text}}
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+            <i class="material-icons">arrow_back</i>
+            <slot name="back-button" />
         </button>
         <div class="mdl-layout-spacer"></div>
     </div>
@@ -15,26 +15,11 @@
 <script>
     export default {
         name: "Header",
-        props: {
-            button: {
-                text: String,
-                icon: String,
-                link: String,
-            }
-        },
-        data() {
-            return {
-                showAddUser: false,
-            };
-        },
-        methods: {
-            buttonClicked() {
-                this.$router.push(this.button.link)
-            }
-        }
     }
 </script>
 
 <style scoped>
-
+    .mdl-button {
+        margin:0 1rem;
+    }
 </style>
