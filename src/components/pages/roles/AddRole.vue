@@ -65,8 +65,8 @@
                     this.permissions.push(this.permission);
                 }
             },
-            removePermission(privilege) {
-                this.permissions.splice(this.permissions.indexOf(privilege), 1);
+            removePermission(permission) {
+                this.permissions.splice(this.permissions.indexOf(permission), 1);
             },
         },
     }
