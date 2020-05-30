@@ -9,7 +9,9 @@
             <template #row="{row}">
                 <router-link :to="`../edit-role/${row.id}`" tag="tr" class="cursor-pointer">
                     <td class="mdl-data-table__cell--non-numeric">{{row.name}}</td>
-                    <td class="mdl-data-table__cell--non-numeric">{{row.permissions.join(', ')}}</td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <div v-for="permission of row.permissions" :key="permission">{{permission}}</div>
+                    </td>
                 </router-link>
             </template>
         </Table>
