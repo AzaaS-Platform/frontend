@@ -27,16 +27,28 @@
     export default {
         name: "Roles",
         components: {Table, Header},
+        created() {
+            this.getDataFromApi()
+        },
         data() {
             return {
                 table: {
                     headers: [
                         'Nazwa roli', 'Uprawnienia'
                     ],
-                    rows: Roles.fetch(),
+                    rows: [],
                 },
             }
         },
+        methods: {
+            async getDataFromApi() {
+                try {
+                    this.table.rows = await Roles.fetch("6aa40429-c52a-4ef2-a38b-4151af1946c2");
+                } catch(e) {
+                    console.error(e);
+                }
+            }
+        }
     }
 </script>
 

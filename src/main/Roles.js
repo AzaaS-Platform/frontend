@@ -1,42 +1,29 @@
+import Fetcher from "./Fetcher.js";
+
 export default class Roles {
-    static fetch() {
+    static async fetch(clientId) {
+        if(Roles.data === null) {
+            let groups = await Fetcher.Get('group/getAll', {client:clientId});
+            Roles.data = [];
+            for(let group of groups) {
+                Roles.data.push({
+                    id: group.entity,
+                    name: group.entity,
+                    permissions: group.permissions
+                });
+            }
+        }
+
         return Roles.data;
     }
 
-    static getRoleById(id) {
+    static async getRoleById(id, clientId) {
+        if(Roles.data === null) {
+            Roles.data = await Roles.fetch(clientId);
+        }
+
         return Roles.data.find(e => e.id === id) ?? null;
     }
 }
 
-Roles.data = [
-    {
-        id: 1,
-        name: 'test',
-        permissions: ['x/y/z', 'q/w/e']
-    },
-    {
-        id: 2,
-        name: "test2",
-        permissions: ['x/y/z', 'q/w/e']
-    },
-    {
-        id: 3,
-        name: "test2",
-        permissions: ['f/o/o', 'foo/bar/qwe', 'q/w/e']
-    },
-    {
-        id: 4,
-        name: "test2",
-        permissions: ['x/y/z', 'q/w/e']
-    },
-    {
-        id: 5,
-        name: "test2",
-        permissions: ['x/y/z', 'q/w/e']
-    },
-    {
-        id: 6,
-        name: "test2",
-        permissions: ['xcv/yui']
-    },
-];
+Roles.data = null;

@@ -13,16 +13,19 @@ export default class Fetcher {
             }
         }
 
-        let request = new Request(path, {method: 'GET'});
-        return (await fetch(request)).json();
+        let request = new Request(Fetcher.SERVER_ADDRESS + path, {
+            mode: 'no-cors',
+            method: 'GET'
+        });
+        return await (await fetch(request)).json();
     }
 
     static async Post(path, data = {}) {
-        let request = new Request(path, {
+        let request = new Request(Fetcher.SERVER_ADDRESS + path, {
             method: 'POST',
             body: JSON.stringify(data)
         });
-        return (await fetch(request)).json();
+        return await (await fetch(request)).json();
     }
 }
 
