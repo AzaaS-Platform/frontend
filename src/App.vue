@@ -1,5 +1,5 @@
 <template>
-    <div id="app" class="mdl-layout">
+    <div id="app">
         <router-view class="view"></router-view>
     </div>
 </template>
