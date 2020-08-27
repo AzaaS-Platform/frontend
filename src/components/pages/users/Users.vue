@@ -1,6 +1,6 @@
 <template>
     <BasicLayout>
-        <TableContent header="Role">
+        <TableContent header="Użytkownicy">
             <Table :headers="table.headers" :rows="table.rows">
                 <template #header="{header}">{{header}}</template>
                 <template #row="{row}">
