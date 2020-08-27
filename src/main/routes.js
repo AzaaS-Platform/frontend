@@ -4,8 +4,11 @@ import AddUser from "../components/pages/users/AddUser.vue";
 import Roles from "../components/pages/roles/Roles.vue";
 import AddRole from "../components/pages/roles/AddRole.vue";
 import EditRole from "../components/pages/roles/EditRole.vue";
+import Login from '../components/pages/login/Login.vue';
+import NotFound from '../components/pages/errors/NotFound.vue';
 
 export default [
+    { path: '/login', component: Login },
     { path: '/add-role', component: AddRole },
     { path: '/edit-role/:id?', component: EditRole },
     { path: '/roles/:page', component: Roles },
@@ -15,4 +18,5 @@ export default [
     { path: '/users/:page', component: Users },
     { path: '/users', redirect: '/users/1' },
     { path: '/', redirect: '/users' },
+    { path: '*', component: NotFound },
 ]
