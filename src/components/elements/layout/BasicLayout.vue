@@ -3,7 +3,7 @@
         <Header/>
         <Drawer/>
         <main class="mdl-layout__content">
-            <slot/>
+            <router-view></router-view>
         </main>
     </div>
 </template>
@@ -14,7 +14,11 @@
 
     export default {
         name: "BasicLayout",
-        components: {Header, Drawer}
+        components: {Header, Drawer},
+        mounted() {
+            // eslint-disable-next-line
+            componentHandler.upgradeDom();
+        },
     }
 </script>
 

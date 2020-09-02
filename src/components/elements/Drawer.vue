@@ -5,11 +5,11 @@
             <div class="scroller" id="scroller">
                 <div class="scroll__container" id="scroll__container">
                     <nav class="mdl-navigation">
-                        <router-link to="/roles" tag="a" class="mdl-navigation__link">
+                        <router-link to="/dashboard/roles" tag="a" class="mdl-navigation__link">
                             <i class="material-icons" role="presentation">dashboard</i>
                             Role
                         </router-link>
-                        <router-link to="/users" tag="a" class="mdl-navigation__link">
+                        <router-link to="/dashboard/users" tag="a" class="mdl-navigation__link">
                             <i class="material-icons" role="presentation">person</i>
                             Użytkownicy
                         </router-link>
