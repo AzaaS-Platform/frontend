@@ -9,7 +9,8 @@
                         <div v-for="role of row.roles" :key="role">{{role}}</div>
                     </td>
                     <td class="mdl-data-table__cell--non-numeric">
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red"
+                                @click="deleteClick">
                             Usuń
                         </button>
                     </td>
@@ -38,6 +39,11 @@
                 },
             }
         },
+        methods: {
+            deleteClick(e) {
+                e.stopPropagation();
+            }
+        }
     }
 </script>
 
