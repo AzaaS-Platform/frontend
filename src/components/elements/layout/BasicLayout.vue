@@ -11,6 +11,7 @@
 <script>
     import Drawer from '../Drawer.vue';
     import Header from '../Header.vue';
+
     export default {
         name: "BasicLayout",
         components: {Header, Drawer}

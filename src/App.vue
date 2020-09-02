@@ -1,21 +1,12 @@
 <template>
-    <div id="app">
-        <router-view class="view"></router-view>
-    </div>
+    <router-view></router-view>
 </template>
 
 <script>
     export default {
         name: 'App',
-        updated() {
-            // eslint-disable-next-line no-undef
-            componentHandler.upgradeDom();
-        },
     }
 </script>
 
 <style>
-    body {
-        font-family:"Roboto", "Helvetica", "Arial", sans-serif;
-    }
 </style>

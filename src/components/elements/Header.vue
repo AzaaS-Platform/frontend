@@ -16,7 +16,7 @@
 
     export default {
         name: "Header",
-        components: {More, AccountDropdown, Search}
+        components: {More, AccountDropdown, Search},
     }
 </script>
 

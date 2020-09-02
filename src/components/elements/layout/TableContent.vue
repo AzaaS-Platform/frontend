@@ -4,6 +4,11 @@
             <div class="mdl-card mdl-shadow--2dp">
                 <div class="mdl-card__title">
                     <h1 class="mdl-card__title-text">{{header}}</h1>
+                    <div class="mdl-layout-spacer"></div>
+                    <router-link :to="addLink" tag="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-green">
+                        <i class="material-icons">add</i>
+                        Dodaj
+                    </router-link>
                 </div>
                 <div class="mdl-card__supporting-text no-padding">
                     <slot/>
@@ -17,7 +22,8 @@
     export default {
         name: "TableContent",
         props: {
-            header: String
+            header: String,
+            addLink: String
         }
     }
 </script>

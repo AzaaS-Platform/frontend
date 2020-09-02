@@ -1,10 +1,10 @@
 <template>
     <BasicLayout>
-        <TableContent header="Użytkownicy">
+        <TableContent header="Użytkownicy" add-link="/add-user">
             <Table :headers="table.headers" :rows="table.rows">
                 <template #header="{header}">{{header}}</template>
                 <template #row="{row}">
-                    <router-link :to="`../edit-user/${row.id}`" tag="tr" class="cursor-pointer">
+                    <router-link :to="`/edit-user/${row.id}`" tag="tr" class="cursor-pointer">
                         <td class="mdl-data-table__cell--non-numeric">{{row.name}}</td>
                         <td class="mdl-data-table__cell--non-numeric">
                             <div v-for="role of row.roles" :key="role">{{role}}</div>

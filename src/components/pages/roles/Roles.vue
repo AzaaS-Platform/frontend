@@ -1,10 +1,10 @@
 <template>
     <BasicLayout>
-        <TableContent header="Role">
+        <TableContent header="Role" add-link="/add-role">
             <Table :headers="table.headers" :rows="table.rows">
                 <template #header="{header}">{{header}}</template>
                 <template #row="{row}">
-                    <router-link :to="`../edit-role/${row.id}`" tag="tr" class="cursor-pointer">
+                    <router-link :to="`/edit-role/${row.id}`" tag="tr" class="cursor-pointer">
                         <td class="mdl-data-table__cell--non-numeric">{{row.id}}</td>
                         <td class="mdl-data-table__cell--non-numeric">{{row.name}}</td>
                         <td class="mdl-data-table__cell--non-numeric">
