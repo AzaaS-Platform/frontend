@@ -21,6 +21,7 @@ export default [
             {path: 'users/:page', component: Users},
             {path: 'users', redirect: '/dashboard/users/1'},
             {path: '*', component: NotFound},
+            {path: '', component: NotFound},
         ]
     },
     {path: '/login', component: Login},
