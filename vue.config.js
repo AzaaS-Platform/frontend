@@ -19,5 +19,8 @@ module.exports = {
             pluginVersion: '4.0.0-rc3',
             uploadConcurrency: 5
         }
-    }
+    },
+    publicPath: process.env.NODE_ENV === 'production'
+        ? '/azaas-frontend/'
+        : '/'
 };
