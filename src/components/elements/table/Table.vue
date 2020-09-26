@@ -1,20 +1,18 @@
 <template>
     <div>
-        <div class="mdl-layout">
-            <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-                <thead>
-                <tr>
-                    <th v-for="header in headers" :key="header" class="mdl-data-table__cell--non-numeric">
-                        <slot name="header" :header="header" />
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <slot name="row" v-for="row of currTable" :row="row" />
-                </tbody>
-            </table>
-        </div>
-        <div class="mdl-grid">
+        <table class="mdl-data-table mdl-js-data-table">
+            <thead>
+            <tr>
+                <th v-for="header in headers" :key="header" class="mdl-data-table__cell--non-numeric">
+                    <slot name="header" :header="header" />
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <slot name="row" v-for="row of currTable" :row="row" />
+            </tbody>
+        </table>
+        <div class="mdl-grid mh-2">
             <div class="mdl-layout-spacer"></div>
             <Pagination :pages-num="Math.ceil(rows.length / maxRows)" :curr-page="page"/>
             <div class="mdl-layout-spacer"></div>
@@ -55,5 +53,7 @@
 </script>
 
 <style scoped>
-
+    .mh-2 {
+        margin:1rem 0;
+    }
 </style>

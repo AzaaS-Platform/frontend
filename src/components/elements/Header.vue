@@ -1,28 +1,24 @@
 <template>
-    <div class="mdl-grid">
-        <div class="mdl-layout-spacer"></div>
-        <router-link :to="mbHref" tag="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--white">
-            <slot name="main-button" />
-        </router-link>
-        <router-link :to="bbHref" tag="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
-            <slot name="back-button" />
-        </router-link>
-        <div class="mdl-layout-spacer"></div>
-    </div>
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <div class="mdl-layout-spacer"></div>
+            <Search/>
+            <AccountDropdown/>
+            <More/>
+        </div>
+    </header>
 </template>
 
 <script>
+    import Search from './header/Search.vue';
+    import AccountDropdown from './header/AccountDropdown.vue';
+    import More from './header/More.vue';
+
     export default {
         name: "Header",
-        props: {
-            mbHref: String,
-            bbHref: String,
-        }
+        components: {More, AccountDropdown, Search},
     }
 </script>
 
 <style scoped>
-    .mdl-button {
-        margin:0 1rem;
-    }
 </style>

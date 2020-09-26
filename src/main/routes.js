@@ -6,17 +6,25 @@ import AddRole from "../components/pages/roles/AddRole.vue";
 import EditRole from "../components/pages/roles/EditRole.vue";
 import Login from '../components/pages/login/Login.vue';
 import NotFound from '../components/pages/errors/NotFound.vue';
+import BasicLayout from '../components/elements/layout/BasicLayout.vue';
 
 export default [
-    { path: '/login', component: Login },
-    { path: '/add-role', component: AddRole },
-    { path: '/edit-role/:id?', component: EditRole },
-    { path: '/roles/:page', component: Roles },
-    { path: '/roles', redirect: '/roles/1' },
-    { path: '/add-user', component: AddUser },
-    { path: '/edit-user/:id', component: EditUser },
-    { path: '/users/:page', component: Users },
-    { path: '/users', redirect: '/users/1' },
-    { path: '/', redirect: '/users' },
-    { path: '*', component: NotFound },
+    {
+        path: '/dashboard', component: BasicLayout,
+        children: [
+            {path: 'add-role', component: AddRole},
+            {path: 'edit-role/:id?', component: EditRole},
+            {path: 'roles/:page', component: Roles},
+            {path: 'roles', redirect: '/dashboard/roles/1'},
+            {path: 'add-user', component: AddUser},
+            {path: 'edit-user/:id', component: EditUser},
+            {path: 'users/:page', component: Users},
+            {path: 'users', redirect: '/dashboard/users/1'},
+            {path: '*', component: NotFound},
+            {path: '', component: NotFound},
+        ]
+    },
+    {path: '/login', component: Login},
+    {path: '/', redirect: '/dashboard/users'},
+    {path: '*', component: NotFound},
 ]

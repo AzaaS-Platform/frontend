@@ -13,13 +13,11 @@
                         <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
                             <span class="text--sorry text-color--white">Sorry, but there's nothing here</span>
                         </div>
-                        <!--<a href="index.html">-->
                         <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
                             <a href="/" class="mdl-button mdl-js-button color-text--light-blue pull-right">
                                 Go Back
                             </a>
                         </div>
-                        <!--</a>alignment--bottom-right-->
                     </div>
                 </div>
             </div>
