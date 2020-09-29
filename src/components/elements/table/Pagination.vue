@@ -3,7 +3,7 @@
         <router-link :to="`../${prevPage}`" append :event="prevPage ? 'click' : ''" :class="{'mdl-button--disabled': !prevPage}" class="mdl-button mdl-js-button mdl-button--icon mdl-color-text--accent">
             <i class="material-icons">arrow_back_ios</i>
         </router-link>
-        <router-link :to="`../${i}`" append v-for="i in range(this.start, this.end)" :key="i"><button class="mdl-button mdl-js-button">{{i}}</button></router-link>
+        <router-link :to="`../${i}`" append v-for="i in range(this.start, this.end)" :key="i"><button :class="`mdl-button mdl-js-button ${i === currPage ? 'background-color--primary' : ''}`">{{i}}</button></router-link>
         <router-link :to="`../${nextPage}`" append :event="nextPage ? 'click' : ''" :class="{'mdl-button--disabled': !nextPage}" class="mdl-button mdl-js-button mdl-button--icon mdl-color-text--accent">
             <i class="material-icons">arrow_forward_ios</i>
         </router-link>

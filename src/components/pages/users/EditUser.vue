@@ -1,17 +1,16 @@
 <template>
     <AddUser v-if="user !== null" :name="user.name" :roles="user.roles" />
-    <div v-else class="mdl-grid">
-        <div>Użytkownik o podanym id nie istnieje</div>
-    </div>
+    <NotFound v-else/>
 </template>
 
 <script>
     import AddUser from "./AddUser.vue";
     import Users from "../../../main/Users.js";
+    import NotFound from '../errors/NotFound.vue';
 
     export default {
         name: "EditUser",
-        components: {AddUser},
+        components: {NotFound, AddUser},
         computed: {
             user() {
                 let id = parseInt(this.$route.params.id);

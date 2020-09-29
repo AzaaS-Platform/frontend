@@ -1,9 +1,5 @@
 <template>
-    <main class="mdl-layout__content">
-        <Header mb-href="/roles" bb-href="/add-user">
-            <template #main-button>Role</template>
-            <template #back-button>Dodaj Użytkownika</template>
-        </Header>
+    <TableContent header="Użytkownicy" add-link="../add-user">
         <Table :headers="table.headers" :rows="table.rows">
             <template #header="{header}">{{header}}</template>
             <template #row="{row}">
@@ -12,31 +8,42 @@
                     <td class="mdl-data-table__cell--non-numeric">
                         <div v-for="role of row.roles" :key="role">{{role}}</div>
                     </td>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red"
+                                @click="deleteClick">
+                            Usuń
+                        </button>
+                    </td>
                 </router-link>
             </template>
         </Table>
-    </main>
+    </TableContent>
 </template>
 
 <script>
     import Users from "../../../main/Users.js";
 
-    import Header from "../../elements/Header.vue";
     import Table from "../../elements/table/Table.vue";
+    import TableContent from '../../elements/layout/TableContent.vue';
 
     export default {
         name: "Users",
-        components: {Table, Header},
+        components: {TableContent, Table},
         data() {
             return {
                 table: {
                     headers: [
-                        'Nazwa użytkownika', 'Role'
+                        'Nazwa użytkownika', 'Role', ''
                     ],
                     rows: Users.fetch(),
                 },
             }
         },
+        methods: {
+            deleteClick(e) {
+                e.stopPropagation();
+            }
+        }
     }
 </script>
 
