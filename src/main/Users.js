@@ -1,4 +1,4 @@
-import Fetcher from './Fetcher.js';
+import Fetcher from './connect/Fetcher.js';
 
 export default class Users {
     static async getAll() {

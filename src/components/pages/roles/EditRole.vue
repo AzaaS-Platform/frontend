@@ -1,21 +1,38 @@
 <template>
-    <AddRole v-if="role !== null" :name="role.name" :permissions="role.permissions" />
-    <NotFound v-else/>
+    <AddRole v-if="role !== null && !loading" :role="role"/>
+    <NotFound v-else-if="role === null"/>
+    <Loading v-else/>
 </template>
 
 <script>
     import AddRole from "./AddRole.vue";
-
-    import Roles from "../../../main/Roles.js";
     import NotFound from '../errors/NotFound.vue';
+    import Loading from '../../elements/Loading.vue';
+    import Connector from '../../../main/connect/Connector.js';
+
+    const connector = new Connector('groups/');
 
     export default {
         name: "EditRole",
-        components: {NotFound, AddRole},
-        computed: {
-            role() {
-                let id = parseInt(this.$route.params.id);
-                return isNaN(id) ? null : Roles.getRoleById(id);
+        components: {Loading, NotFound, AddRole},
+        mounted() {
+            this.fetchRole(this.$route.params.id);
+        },
+        data() {
+            return {
+                role: null,
+                loading: true
+            };
+        },
+        methods: {
+            async fetchRole(entity) {
+                try {
+                    this.role = connector.get(entity);
+                } catch(e) {
+                    this.role = null;
+                } finally {
+                    this.loading = false;
+                }
             }
         }
     }

@@ -34,7 +34,9 @@
 
 <script>
     import FormList from '../../elements/form/FormList.vue';
-    import Roles from '../../../main/Roles.js';
+    import Connector from '../../../main/connect/Connector.js';
+
+    const rolesConnector = new Connector('groups/');
 
     export default {
         name: "AddUser",
@@ -48,9 +50,6 @@
                 type: Array,
                 default: () => []
             },
-        },
-        created() {
-
         },
         mounted() {
             // eslint-disable-next-line
@@ -71,7 +70,7 @@
             },
 
             async fetchRoles() {
-                this.allRoles = await Roles.fetch();
+                this.allRoles = await rolesConnector.getAll();
             }
         },
     }

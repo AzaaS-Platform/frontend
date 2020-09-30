@@ -50,6 +50,10 @@
             adding: Boolean,
             header: String
         },
+        updated() {
+            // eslint-disable-next-line
+            componentHandler.upgradeDom();
+        },
         data() {
             return {
                 selected: [],
