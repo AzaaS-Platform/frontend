@@ -3,10 +3,10 @@
         <Table :headers="table.headers" :rows="table.rows">
             <template #header="{header}">{{header}}</template>
             <template #row="{row}">
-                <router-link :to="`../edit-user/${row.id}`" tag="tr" class="cursor-pointer">
-                    <td class="mdl-data-table__cell--non-numeric">{{row.name}}</td>
+                <router-link :to="`../edit-user/${row.entity}`" tag="tr" class="cursor-pointer">
+                    <td class="mdl-data-table__cell--non-numeric">{{row.username}}</td>
                     <td class="mdl-data-table__cell--non-numeric">
-                        <div v-for="role of row.roles" :key="role">{{role}}</div>
+                        <div v-for="group of row.groups" :key="group">{{group}}</div>
                     </td>
                     <td class="mdl-data-table__cell--non-numeric">
                         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red"
@@ -29,19 +29,25 @@
     export default {
         name: "Users",
         components: {TableContent, Table},
+        created() {
+            this.fetchUsers();
+        },
         data() {
             return {
                 table: {
                     headers: [
                         'Nazwa użytkownika', 'Role', ''
                     ],
-                    rows: Users.fetch(),
+                    rows: [],
                 },
             }
         },
         methods: {
             deleteClick(e) {
                 e.stopPropagation();
+            },
+            async fetchUsers() {
+                this.table.rows = (await Users.getAll()).payload;
             }
         }
     }

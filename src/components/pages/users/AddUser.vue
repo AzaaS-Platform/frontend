@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
-            <FormList :elements="roles" v-model="selected" :adding="false" header="Role"/>
+            <FormList :elements="allRoles" v-model="selected" :adding="false" header="Role"/>
         </div>
         <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone mdl-typography--text-right">
             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-light-blue"
@@ -34,6 +34,7 @@
 
 <script>
     import FormList from '../../elements/form/FormList.vue';
+    import Roles from '../../../main/Roles.js';
 
     export default {
         name: "AddUser",
@@ -48,6 +49,9 @@
                 default: () => []
             },
         },
+        created() {
+
+        },
         mounted() {
             // eslint-disable-next-line
             componentHandler.upgradeDom();
@@ -55,7 +59,8 @@
         data() {
             return {
                 userName: this.name,
-                selected: []
+                selected: this.roles,
+                allRoles: [],
             }
         },
         methods: {
@@ -63,6 +68,10 @@
                 e.preventDefault();
                 // TODO validation, submit
                 console.log(this.selected);
+            },
+
+            async fetchRoles() {
+                this.allRoles = await Roles.fetch();
             }
         },
     }

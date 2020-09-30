@@ -1,5 +1,5 @@
 <template>
-    <AddUser v-if="user !== null" :name="user.name" :roles="user.roles" />
+    <AddUser v-if="user !== null" :name="user.username" :roles="user.groups"/>
     <NotFound v-else/>
 </template>
 
@@ -11,10 +11,19 @@
     export default {
         name: "EditUser",
         components: {NotFound, AddUser},
-        computed: {
-            user() {
-                let id = parseInt(this.$route.params.id);
-                return isNaN(id) ? null : Users.getUserById(id);
+        created() {
+            console.log(this.$route.params.id);
+            this.fetchUser(this.$route.params.id);
+        },
+        data() {
+            return {
+                user: null
+            };
+        },
+        methods: {
+            async fetchUser(entity) {
+                console.log((await Users.get(entity)).payload);
+                this.user = (await Users.get(entity)).payload ?? null;
             }
         }
     }
