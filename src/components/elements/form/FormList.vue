@@ -54,6 +54,10 @@
             // eslint-disable-next-line
             componentHandler.upgradeDom();
         },
+        updated() {
+            // eslint-disable-next-line
+            componentHandler.upgradeDom();
+        },
         data() {
             return {
                 selected: [],

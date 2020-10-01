@@ -56,8 +56,8 @@
         },
         data() {
             return {
-                roleName: this.role.entity,
-                permissions: [...this.role.permissions],
+                roleName: this.role ? this.role.entity : '',
+                permissions: this.role ? this.role.permissions : [],
                 permission: '',
                 loading: false
             }

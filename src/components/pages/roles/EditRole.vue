@@ -1,7 +1,7 @@
 <template>
     <AddRole v-if="role !== null && !loading" :role="role"/>
-    <NotFound v-else-if="role === null"/>
-    <Loading v-else/>
+    <Loading v-else-if="loading"/>
+    <NotFound v-else/>
 </template>
 
 <script>
@@ -27,7 +27,7 @@
         methods: {
             async fetchRole(entity) {
                 try {
-                    this.role = connector.get(entity);
+                    this.role = await connector.get(entity);
                 } catch(e) {
                     this.role = null;
                 } finally {
