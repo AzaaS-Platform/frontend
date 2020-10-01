@@ -1,7 +1,7 @@
 <template>
     <AddUser v-if="user !== null && !loading" :user="user"/>
-    <NotFound v-else-if="user === null"/>
-    <Loading v-else/>
+    <Loading v-else-if="loading"/>
+    <NotFound v-else/>
 </template>
 
 <script>
