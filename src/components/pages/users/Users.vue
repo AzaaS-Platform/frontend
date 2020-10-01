@@ -1,6 +1,6 @@
 <template>
     <TableContent header="Użytkownicy" add-link="../add-user">
-        <Table :headers="table.headers" :rows="table.rows">
+        <Table v-if="!loading" :headers="table.headers" :rows="table.rows">
             <template #header="{header}">{{header}}</template>
             <template #row="{row}">
                 <router-link :to="`../edit-user/${row.entity}`" tag="tr" class="cursor-pointer">
@@ -10,26 +10,29 @@
                     </td>
                     <td class="mdl-data-table__cell--non-numeric">
                         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red"
-                                @click="deleteClick">
+                                @click="e => deleteClick(e, row.entity)">
                             Usuń
                         </button>
                     </td>
                 </router-link>
             </template>
         </Table>
+        <Loading v-else/>
     </TableContent>
 </template>
 
 <script>
-    import Users from "../../../main/Users.js";
-
     import Table from "../../elements/table/Table.vue";
     import TableContent from '../../elements/layout/TableContent.vue';
+    import Connector from '../../../main/connect/Connector.js';
+    import Loading from '../../elements/Loading.vue';
+
+    const connector = new Connector('users/');
 
     export default {
         name: "Users",
-        components: {TableContent, Table},
-        created() {
+        components: {Loading, TableContent, Table},
+        mounted() {
             this.fetchUsers();
         },
         data() {
@@ -40,14 +43,32 @@
                     ],
                     rows: [],
                 },
+                loading: true,
             }
         },
         methods: {
-            deleteClick(e) {
+            async deleteClick(e, entity) {
                 e.stopPropagation();
+
+                try {
+                    this.loading = true;
+                    await connector.delete(entity);
+                    this.table.rows = this.table.rows.filter(user => user.entity !== entity);
+                } catch(e) {
+                    this.table.rows = [];
+                } finally {
+                    this.loading = false;
+                }
             },
+
             async fetchUsers() {
-                this.table.rows = (await Users.getAll()).payload;
+                try {
+                    this.table.rows = await connector.getAll();
+                } catch(e) {
+                    this.table.rows = [];
+                } finally {
+                    this.loading = false;
+                }
             }
         }
     }

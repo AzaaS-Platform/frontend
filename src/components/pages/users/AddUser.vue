@@ -1,5 +1,6 @@
 <template>
-    <div class="mdl-grid mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
+    <div v-if="!loading"
+         class="mdl-grid mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
         <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
             <div class="mdl-card mdl-shadow--2dp">
                 <div class="mdl-card__title">
@@ -10,8 +11,15 @@
                         <div class="mdl-grid">
                             <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone form__article">
                                 <div class="mdl-textfield mdl-js-textfield full-size">
-                                    <input class="mdl-textfield__input" type="text" id="name" v-model="userName">
-                                    <label class="mdl-textfield__label" for="name">Nazwa</label>
+                                    <input class="mdl-textfield__input" type="text" id="name" v-model="username">
+                                    <label class="mdl-textfield__label" for="name">Nazwa użytkownika</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone form__article">
+                                <div class="mdl-textfield mdl-js-textfield full-size">
+                                    <input class="mdl-textfield__input" type="password" id="password"
+                                           v-model="password">
+                                    <label class="mdl-textfield__label" for="password">Hasło</label>
                                 </div>
                             </div>
                         </div>
@@ -30,47 +38,72 @@
             </button>
         </div>
     </div>
+    <Loading v-else/>
 </template>
 
 <script>
     import FormList from '../../elements/form/FormList.vue';
     import Connector from '../../../main/connect/Connector.js';
+    import Loading from '../../elements/Loading.vue';
 
     const rolesConnector = new Connector('groups/');
+    const usersConnector = new Connector('users/');
 
     export default {
         name: "AddUser",
-        components: {FormList},
+        components: {Loading, FormList},
         props: {
-            name: {
-                type: String,
-                default: ''
-            },
-            roles: {
-                type: Array,
-                default: () => []
+            user: {
+                type: Object,
+                default: null
             },
         },
         mounted() {
             // eslint-disable-next-line
             componentHandler.upgradeDom();
+
+            this.fetchRoles();
         },
         data() {
             return {
-                userName: this.name,
-                selected: this.roles,
+                username: this.user ? this.user.username : '',
+                password: '',
+                selected: this.user ? this.user.groups : [],
                 allRoles: [],
+                loading: true
             }
         },
         methods: {
-            submitForm(e) {
+            async submitForm(e) {
                 e.preventDefault();
                 // TODO validation, submit
                 console.log(this.selected);
+
+                this.loading = true;
+                if(this.user !== null) {
+                    await usersConnector.modify(this.user.entity, {
+                        groups: [...this.selected],
+                        username: this.username ? this.username : undefined,
+                        password: this.password ? this.password : undefined
+                    });
+                } else {
+                    await usersConnector.add({
+                        groups: [...this.selected],
+                        username: this.username,
+                        password: this.password
+                    });
+                }
+                this.loading = false;
             },
 
             async fetchRoles() {
-                this.allRoles = await rolesConnector.getAll();
+                try {
+                    this.allRoles = (await rolesConnector.getAll()).map(role => role.entity);
+                } catch(e) {
+                    this.allRoles = [];
+                } finally {
+                    this.loading = false;
+                }
             }
         },
     }

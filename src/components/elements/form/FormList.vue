@@ -50,7 +50,7 @@
             adding: Boolean,
             header: String
         },
-        updated() {
+        mounted() {
             // eslint-disable-next-line
             componentHandler.upgradeDom();
         },
