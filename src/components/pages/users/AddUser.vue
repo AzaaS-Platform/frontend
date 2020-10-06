@@ -28,7 +28,12 @@
             </div>
         </div>
         <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
-            <FormList :elements="allRoles" v-model="selected" :adding="false" header="Role"/>
+            <div class="mdl-card mdl-shadow--2dp todo">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Role</h2>
+                </div>
+                <SelectList v-model="selected" :elements="allRoles" :init-selected="selected" :removable="false"/>
+            </div>
         </div>
         <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone mdl-typography--text-right">
             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-light-blue"
@@ -42,16 +47,16 @@
 </template>
 
 <script>
-    import FormList from '../../elements/form/FormList.vue';
     import Connector from '../../../main/connect/Connector.js';
     import Loading from '../../elements/Loading.vue';
+    import SelectList from '../../elements/form/SelectList.vue';
 
     const rolesConnector = new Connector('groups/');
     const usersConnector = new Connector('users/');
 
     export default {
         name: "AddUser",
-        components: {Loading, FormList},
+        components: {SelectList, Loading},
         props: {
             user: {
                 type: Object,
