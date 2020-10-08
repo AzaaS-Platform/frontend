@@ -21,7 +21,12 @@
             </div>
         </div>
         <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
-            <FormList v-model="permissions" :adding="true" header="Uprawnienia"/>
+            <div class="mdl-card mdl-shadow--2dp todo">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Role</h2>
+                </div>
+                <EditableSelectList :elements="permissions" v-model="permissions"/>
+            </div>
         </div>
         <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone mdl-typography--text-right">
             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-light-blue"
@@ -35,15 +40,15 @@
 </template>
 
 <script>
-    import FormList from '../../elements/form/FormList.vue';
     import Connector from '../../../main/connect/Connector.js';
     import Loading from '../../elements/Loading.vue';
+    import EditableSelectList from '../../elements/form/EditableSelectList.vue';
 
     const connector = new Connector('groups/');
 
     export default {
         name: "AddRole",
-        components: {Loading, FormList},
+        components: {EditableSelectList, Loading},
         props: {
             role: {
                 type: Object,
@@ -58,7 +63,6 @@
             return {
                 roleName: this.role ? this.role.entity : '',
                 permissions: this.role ? this.role.permissions : [],
-                permission: '',
                 loading: false
             }
         },

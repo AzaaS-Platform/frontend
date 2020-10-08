@@ -1,5 +1,5 @@
 export default class Fetcher {
-    static TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7ImNsdCI6InRlc3QtY2xpZW50IiwidXNyIjoiZjc0NTRmZmQtYjc5Ni00NDBjLTg1ZTAtYTYxNTRhYjgyOTAwIn0sImlhdCI6MTYwMjAyNTgzMywiZXhwIjoxNjAyMDI3NjMzfQ.tbMoLCS-9SH6IjQbwfDy2JQVnByICIQqWJNQWsVVEbM';
+    static TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7ImNsdCI6InRlc3QtY2xpZW50IiwidXNyIjoiZjc0NTRmZmQtYjc5Ni00NDBjLTg1ZTAtYTYxNTRhYjgyOTAwIn0sImlhdCI6MTYwMjA2Njc4MSwiZXhwIjoxNjAyMDY4NTgxfQ.9fbtE4PdEkAeZL4rIfNKg4rrFPKW3tfO03rJAHGE3xU';
 
     static async Get(path, data = {}) {
         let els = Object.keys(data);
