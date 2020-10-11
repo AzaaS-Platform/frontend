@@ -40,11 +40,9 @@
 </template>
 
 <script>
-    import Connector from '../../../main/connect/Connector.js';
     import Loading from '../../elements/Loading.vue';
     import EditableSelectList from '../../elements/form/EditableSelectList.vue';
-
-    const connector = new Connector('groups/');
+    import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
 
     export default {
         name: "AddRole",
@@ -74,14 +72,15 @@
                 e.preventDefault();
                 // TODO validation
 
+                const rolesConnector = ConnectorFactory.getConnector('roles');
                 this.loading = true;
                 if(this.role !== null) {
-                    await connector.modify(this.role.entity, {
+                    await rolesConnector.modify(this.role.entity, {
                         name: this.roleName,
                         permissions: [...this.mappedPermissions.map(permission => permission.value)]
                     });
                 } else {
-                    await connector.add({
+                    await rolesConnector.add({
                         name: this.roleName,
                         permissions: [...this.mappedPermissions.map(permission => permission.value)]
                     });

@@ -47,12 +47,9 @@
 </template>
 
 <script>
-    import Connector from '../../../main/connect/Connector.js';
     import Loading from '../../elements/Loading.vue';
     import SelectList from '../../elements/form/SelectList.vue';
-
-    const rolesConnector = new Connector('groups/');
-    const usersConnector = new Connector('users/');
+    import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
 
     export default {
         name: "AddUser",
@@ -83,6 +80,7 @@
                 e.preventDefault();
                 // TODO validation, submit
 
+                const usersConnector = ConnectorFactory.getConnector('users');
                 this.loading = true;
                 if(this.user !== null) {
                     await usersConnector.modify(this.user.entity, {
@@ -102,6 +100,7 @@
 
             async fetchRoles() {
                 try {
+                    const rolesConnector = ConnectorFactory.getConnector('roles');
                     let roles = await rolesConnector.getAll();
                     this.mappedAllRoles = roles.map(role => ({value: role.entity, name: role.name}));
                     this.selected = this.user.groups.map(roleEntity => ({

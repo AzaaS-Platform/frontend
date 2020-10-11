@@ -8,9 +8,7 @@
     import AddUser from "./AddUser.vue";
     import NotFound from '../errors/NotFound.vue';
     import Loading from '../../elements/Loading.vue';
-    import Connector from '../../../main/connect/Connector.js';
-
-    const connector = new Connector('users/');
+    import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
 
     export default {
         name: "EditUser",
@@ -27,7 +25,8 @@
         methods: {
             async fetchUser(entity) {
                 try {
-                    this.user = await connector.get(entity);
+                    const usersConnector = ConnectorFactory.getConnector('users');
+                    this.user = await usersConnector.get(entity);
                 } catch(e) {
                     this.user = null;
                 } finally {

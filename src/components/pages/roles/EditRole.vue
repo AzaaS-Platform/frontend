@@ -8,9 +8,7 @@
     import AddRole from "./AddRole.vue";
     import NotFound from '../errors/NotFound.vue';
     import Loading from '../../elements/Loading.vue';
-    import Connector from '../../../main/connect/Connector.js';
-
-    const connector = new Connector('groups/');
+    import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
 
     export default {
         name: "EditRole",
@@ -27,7 +25,8 @@
         methods: {
             async fetchRole(entity) {
                 try {
-                    this.role = await connector.get(entity);
+                    const rolesConnector = ConnectorFactory.getConnector('roles');
+                    this.role = await rolesConnector.get(entity);
                 } catch(e) {
                     this.role = null;
                 } finally {
