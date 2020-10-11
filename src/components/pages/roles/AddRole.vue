@@ -23,9 +23,9 @@
         <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
             <div class="mdl-card mdl-shadow--2dp todo">
                 <div class="mdl-card__title">
-                    <h2 class="mdl-card__title-text">Role</h2>
+                    <h2 class="mdl-card__title-text">Uprawnienia</h2>
                 </div>
-                <EditableSelectList :elements="permissions" v-model="permissions"/>
+                <EditableSelectList :elements="mappedPermissions" v-model="mappedPermissions"/>
             </div>
         </div>
         <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone mdl-typography--text-right">
@@ -61,8 +61,11 @@
         },
         data() {
             return {
-                roleName: this.role ? this.role.entity : '',
-                permissions: this.role ? this.role.permissions : [],
+                roleName: this.role ? this.role.name : '',
+                mappedPermissions: this.role ? this.role.permissions.map(permission => ({
+                    value: permission,
+                    name: permission
+                })) : [],
                 loading: false
             }
         },
@@ -74,11 +77,13 @@
                 this.loading = true;
                 if(this.role !== null) {
                     await connector.modify(this.role.entity, {
-                        permissions: [...this.permissions]
+                        name: this.roleName,
+                        permissions: [...this.mappedPermissions.map(permission => permission.value)]
                     });
                 } else {
                     await connector.add({
-                        permissions: [...this.permissions]
+                        name: this.roleName,
+                        permissions: [...this.mappedPermissions.map(permission => permission.value)]
                     });
                 }
                 this.loading = false;

@@ -6,7 +6,9 @@
                 <router-link :to="`../edit-user/${row.entity}`" tag="tr" class="cursor-pointer">
                     <td class="mdl-data-table__cell--non-numeric">{{row.username}}</td>
                     <td class="mdl-data-table__cell--non-numeric">
-                        <div v-for="group of row.groups" :key="group">{{group}}</div>
+                        <div v-for="group of row.groups" :key="group">{{roles.find(role => role.entity ===
+                            group).name}}
+                        </div>
                     </td>
                     <td class="mdl-data-table__cell--non-numeric">
                         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red"
@@ -28,12 +30,18 @@
     import Loading from '../../elements/Loading.vue';
 
     const connector = new Connector('users/');
+    const rolesConnector = new Connector('groups/');
 
     export default {
         name: "Users",
         components: {Loading, TableContent, Table},
         mounted() {
-            this.fetchUsers();
+            (async() => {
+                this.loading = true;
+                await this.fetchUsers();
+                await this.fetchRoles();
+                this.loading = false;
+            })()
         },
         data() {
             return {
@@ -44,6 +52,7 @@
                     rows: [],
                 },
                 loading: true,
+                roles: []
             }
         },
         methods: {
@@ -66,8 +75,14 @@
                     this.table.rows = await connector.getAll();
                 } catch(e) {
                     this.table.rows = [];
-                } finally {
-                    this.loading = false;
+                }
+            },
+
+            async fetchRoles() {
+                try {
+                    this.roles = await rolesConnector.getAll();
+                } catch(e) {
+                    this.roles = [];
                 }
             }
         }

@@ -45,8 +45,8 @@
         },
         methods: {
             addElement() {
-                if(this.element !== '' && !this.data.includes(this.element)) {
-                    this.data.push(this.element);
+                if(this.element !== '' && !this.data.find(element => element.value === this.element)) {
+                    this.data.push({value: this.element, name: this.element});
                     this.element = '';
                     ++this.selectListKey;
                     this.$emit('input', this.data);
@@ -54,13 +54,13 @@
             },
 
             removeElement(element) {
-                this.data = this.data.filter(item => item !== element);
+                this.data = this.data.filter(item => item.value !== element.value);
                 ++this.selectListKey;
                 this.$emit('input', this.data);
             },
 
             removeSelected() {
-                this.data = this.data.filter(item => !this.selected.includes(item));
+                this.data = this.data.filter(item => !this.selected.find(selected => item.value === selected.value));
                 ++this.selectListKey;
                 this.$emit('input', this.data);
             },
