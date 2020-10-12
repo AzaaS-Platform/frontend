@@ -27,21 +27,27 @@
                         Settings
                     </span>
             </li>
-            <a href="login.html">
-                <li class="mdl-menu__item mdl-list__item">
+            <li class="mdl-menu__item mdl-list__item" @click="logout">
                         <span class="mdl-list__item-primary-content">
                             <i class="material-icons mdl-list__item-icon text-color--secondary">exit_to_app</i>
                             Log out
                         </span>
-                </li>
-            </a>
+            </li>
         </ul>
     </div>
 </template>
 
 <script>
+    import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
+
     export default {
-        name: "AccountDropdown"
+        name: "AccountDropdown",
+        methods: {
+            async logout() {
+                await ConnectorFactory.invalidate();
+                this.$router.push('/admin/login');
+            }
+        }
     }
 </script>
 

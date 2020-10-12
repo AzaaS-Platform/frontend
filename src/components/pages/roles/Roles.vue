@@ -27,9 +27,7 @@
     import Table from "../../elements/table/Table.vue";
     import TableContent from '../../elements/layout/TableContent.vue';
     import Loading from '../../elements/Loading.vue';
-    import Connector from '../../../main/connect/Connector.js';
-
-    const connector = new Connector('groups/');
+    import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
 
     export default {
         name: "Roles",
@@ -53,8 +51,9 @@
                 e.stopPropagation();
 
                 try {
+                    const rolesConnector = ConnectorFactory.getConnector('roles');
                     this.loading = true;
-                    await connector.delete(entity);
+                    await rolesConnector.delete(entity);
                     this.table.rows = this.table.rows.filter(role => role.entity !== entity);
                 } catch(e) {
                     this.table.rows = [];
@@ -65,7 +64,8 @@
 
             async fetchRoles() {
                 try {
-                    this.table.rows = await connector.getAll();
+                    const rolesConnector = ConnectorFactory.getConnector('roles');
+                    this.table.rows = await rolesConnector.getAll();
                 } catch(e) {
                     this.table.rows = [];
                 } finally {

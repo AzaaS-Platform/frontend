@@ -6,8 +6,8 @@
                 <router-link :to="`../edit-user/${row.entity}`" tag="tr" class="cursor-pointer">
                     <td class="mdl-data-table__cell--non-numeric">{{row.username}}</td>
                     <td class="mdl-data-table__cell--non-numeric">
-                        <div v-for="group of row.groups" :key="group">{{roles.find(role => role.entity ===
-                            group).name}}
+                        <div v-for="group of row.groups" :key="group">
+                            {{roles.find(role => role.entity === group).name}}
                         </div>
                     </td>
                     <td class="mdl-data-table__cell--non-numeric">
@@ -26,11 +26,8 @@
 <script>
     import Table from "../../elements/table/Table.vue";
     import TableContent from '../../elements/layout/TableContent.vue';
-    import Connector from '../../../main/connect/Connector.js';
     import Loading from '../../elements/Loading.vue';
-
-    const connector = new Connector('users/');
-    const rolesConnector = new Connector('groups/');
+    import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
 
     export default {
         name: "Users",
@@ -60,8 +57,9 @@
                 e.stopPropagation();
 
                 try {
+                    const usersConnector = ConnectorFactory.getConnector('users');
                     this.loading = true;
-                    await connector.delete(entity);
+                    await usersConnector.delete(entity);
                     this.table.rows = this.table.rows.filter(user => user.entity !== entity);
                 } catch(e) {
                     this.table.rows = [];
@@ -72,7 +70,8 @@
 
             async fetchUsers() {
                 try {
-                    this.table.rows = await connector.getAll();
+                    const usersConnector = ConnectorFactory.getConnector('users');
+                    this.table.rows = await usersConnector.getAll();
                 } catch(e) {
                     this.table.rows = [];
                 }
@@ -80,6 +79,7 @@
 
             async fetchRoles() {
                 try {
+                    const rolesConnector = ConnectorFactory.getConnector('roles');
                     this.roles = await rolesConnector.getAll();
                 } catch(e) {
                     this.roles = [];

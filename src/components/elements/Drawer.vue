@@ -1,5 +1,5 @@
 <template>
-    <div ref="test" class="mdl-layout__drawer">
+    <div class="mdl-layout__drawer">
         <header>darkboard</header>
         <div class="scroll__wrapper" id="scroll__wrapper">
             <div class="scroller" id="scroller">
