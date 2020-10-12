@@ -1,5 +1,6 @@
 <template>
-    <div class="mdl-grid mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
+    <div v-if="!loading"
+         class="mdl-grid mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
         <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
             <div class="mdl-card mdl-shadow--2dp">
                 <div class="mdl-card__title">
@@ -20,7 +21,7 @@
             </div>
         </div>
         <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
-            <FormList v-model="dataPermissions" :adding="true" header="Uprawnienia"/>
+            <FormList v-model="permissions" :adding="true" header="Uprawnienia"/>
         </div>
         <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone mdl-typography--text-right">
             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-light-blue"
@@ -30,22 +31,23 @@
             </button>
         </div>
     </div>
+    <Loading v-else/>
 </template>
 
 <script>
     import FormList from '../../elements/form/FormList.vue';
+    import Connector from '../../../main/connect/Connector.js';
+    import Loading from '../../elements/Loading.vue';
+
+    const connector = new Connector('groups/');
 
     export default {
         name: "AddRole",
-        components: {FormList},
+        components: {Loading, FormList},
         props: {
-            name: {
-                type: String,
-                default: ''
-            },
-            permissions: {
-                type: Array,
-                default: () => []
+            role: {
+                type: Object,
+                default: null
             },
         },
         mounted() {
@@ -54,17 +56,28 @@
         },
         data() {
             return {
-                roleName: this.name,
-                dataPermissions: [...this.permissions],
-                selected: [],
+                roleName: this.role ? this.role.entity : '',
+                permissions: this.role ? this.role.permissions : [],
                 permission: '',
+                loading: false
             }
         },
         methods: {
-            submitForm(e) {
+            async submitForm(e) {
                 e.preventDefault();
-                // TODO validation, submit
-                console.log(this.dataPermissions);
+                // TODO validation
+
+                this.loading = true;
+                if(this.role !== null) {
+                    await connector.modify(this.role.entity, {
+                        permissions: [...this.permissions]
+                    });
+                } else {
+                    await connector.add({
+                        permissions: [...this.permissions]
+                    });
+                }
+                this.loading = false;
             }
         },
     }

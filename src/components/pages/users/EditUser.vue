@@ -1,20 +1,38 @@
 <template>
-    <AddUser v-if="user !== null" :name="user.name" :roles="user.roles" />
+    <AddUser v-if="user !== null && !loading" :user="user"/>
+    <Loading v-else-if="loading"/>
     <NotFound v-else/>
 </template>
 
 <script>
     import AddUser from "./AddUser.vue";
-    import Users from "../../../main/Users.js";
     import NotFound from '../errors/NotFound.vue';
+    import Loading from '../../elements/Loading.vue';
+    import Connector from '../../../main/connect/Connector.js';
+
+    const connector = new Connector('users/');
 
     export default {
         name: "EditUser",
-        components: {NotFound, AddUser},
-        computed: {
-            user() {
-                let id = parseInt(this.$route.params.id);
-                return isNaN(id) ? null : Users.getUserById(id);
+        components: {Loading, NotFound, AddUser},
+        mounted() {
+            this.fetchUser(this.$route.params.id);
+        },
+        data() {
+            return {
+                user: null,
+                loading: true
+            };
+        },
+        methods: {
+            async fetchUser(entity) {
+                try {
+                    this.user = await connector.get(entity);
+                } catch(e) {
+                    this.user = null;
+                } finally {
+                    this.loading = false;
+                }
             }
         }
     }

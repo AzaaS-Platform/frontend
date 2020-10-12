@@ -29,10 +29,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div v-show="loading" class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
-                            <div id="p7"
-                                 class="mdl-progress mdl-js-progress mdl-progress__indeterminate progress--colored-light-blue"></div>
-                        </div>
+                        <Loading v-show="loading"/>
                     </div>
                 </div>
             </div>
@@ -41,8 +38,11 @@
 </template>
 
 <script>
+    import Loading from '../../elements/Loading.vue';
+
     export default {
         name: "Login",
+        components: {Loading},
         data() {
             return {
                 loading: false
