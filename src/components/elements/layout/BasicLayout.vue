@@ -2,7 +2,7 @@
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header is-small-screen">
         <Header v-show="showHeader"/>
         <Drawer v-show="showHeader"/>
-        <main class="mdl-layout__content">
+        <main class="mdl-layout__content" :style="!showHeader && {marginLeft: '0px'}">
             <router-view></router-view>
         </main>
     </div>
