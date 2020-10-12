@@ -24,7 +24,12 @@ export default [
             {path: '', component: NotFound},
         ]
     },
-    {path: '/login', component: Login},
-    {path: '/', redirect: '/login'},
+    {
+        path: '/admin', component: BasicLayout,
+        children: [
+            {path: 'login', component: Login},
+        ]
+    },
+    {path: '/', redirect: '/admin/login'},
     {path: '*', component: NotFound},
 ]

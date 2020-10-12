@@ -8,7 +8,6 @@ export default class Connector {
     }
 
     async getAll() {
-        console.log(this.authenticator);
         return await Fetcher.Get(`${Server.API_BASE_URL}clients/${this.authenticator.client}/${this.path}`, await this.authenticator.getAuthorizationHeader());
     }
 

@@ -45,7 +45,7 @@
         methods: {
             async logout() {
                 await ConnectorFactory.invalidate();
-                this.$router.push('/login');
+                this.$router.push('/admin/login');
             }
         }
     }

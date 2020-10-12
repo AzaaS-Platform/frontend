@@ -23,7 +23,6 @@ export default class Authenticator {
 
     async getAuthorizationHeader() {
         if(!Token.checkExpiryTime(this.token, Authenticator.REFRESH_SECONDS)) {
-            console.log('wtf');
             await this.refreshToken();
         }
 
