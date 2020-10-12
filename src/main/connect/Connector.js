@@ -2,7 +2,7 @@ import Fetcher from './Fetcher.js';
 
 export default class Connector {
     static SERVER_ADDRESS = /*'https://ad1o51iav4.execute-api.eu-central-1.amazonaws.com/dev/'*/'http://localhost:3000/dev/';
-    static CLIENT = 'test-client';
+    static CLIENT = 'tak';
 
     constructor(path) {
         this.path = path;

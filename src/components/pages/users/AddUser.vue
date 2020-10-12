@@ -32,7 +32,7 @@
                 <div class="mdl-card__title">
                     <h2 class="mdl-card__title-text">Role</h2>
                 </div>
-                <SelectList v-model="selected" :elements="allRoles" :init-selected="selected" :removable="false"/>
+                <SelectList v-model="selected" :elements="mappedAllRoles" :init-selected="selected" :removable="false"/>
             </div>
         </div>
         <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone mdl-typography--text-right">
@@ -73,8 +73,8 @@
             return {
                 username: this.user ? this.user.username : '',
                 password: '',
-                selected: this.user ? this.user.groups : [],
-                allRoles: [],
+                selected: [],
+                mappedAllRoles: [],
                 loading: true
             }
         },
@@ -82,18 +82,17 @@
             async submitForm(e) {
                 e.preventDefault();
                 // TODO validation, submit
-                console.log(this.selected);
 
                 this.loading = true;
                 if(this.user !== null) {
                     await usersConnector.modify(this.user.entity, {
-                        groups: [...this.selected],
+                        groups: this.selected.map(element => element.value) ?? [],
                         username: this.username ? this.username : undefined,
                         password: this.password ? this.password : undefined
                     });
                 } else {
                     await usersConnector.add({
-                        groups: [...this.selected],
+                        groups: this.selected.map(element => element.value) ?? [],
                         username: this.username,
                         password: this.password
                     });
@@ -103,9 +102,14 @@
 
             async fetchRoles() {
                 try {
-                    this.allRoles = (await rolesConnector.getAll()).map(role => role.entity);
+                    let roles = await rolesConnector.getAll();
+                    this.mappedAllRoles = roles.map(role => ({value: role.entity, name: role.name}));
+                    this.selected = this.user.groups.map(roleEntity => ({
+                        value: roleEntity,
+                        name: roles.find(role => role.entity === roleEntity).name
+                    }))
                 } catch(e) {
-                    this.allRoles = [];
+                    this.mappedAllRoles = [];
                 } finally {
                     this.loading = false;
                 }
