@@ -1,4 +1,4 @@
 export default class Server {
 }
 
-Server.API_BASE_URL = 'http://localhost:3000/dev/'
+Server.API_BASE_URL = process.env.VUE_APP_API_BASE_URL
