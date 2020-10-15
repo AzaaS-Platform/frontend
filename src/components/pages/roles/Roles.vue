@@ -28,12 +28,16 @@
     import TableContent from '../../elements/layout/TableContent.vue';
     import Loading from '../../elements/Loading.vue';
     import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
+    import Fetcher from '../../../main/connect/Fetcher.js';
 
     export default {
         name: "Roles",
         components: {Loading, TableContent, Table},
         mounted() {
             this.fetchRoles();
+        },
+        beforeDestroy() {
+            Fetcher.abortAll();
         },
         data() {
             return {

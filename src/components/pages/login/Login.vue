@@ -48,6 +48,7 @@
     import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
     import Token from '../../../main/storage/Token.js';
     import Client from '../../../main/storage/Client.js';
+    import Fetcher from '../../../main/connect/Fetcher.js';
 
     export default {
         name: "Login",
@@ -57,6 +58,9 @@
             if(token && Token.checkExpiryTime(token)) {
                 this.$router.push('/dashboard/users');
             }
+        },
+        beforeDestroy() {
+            Fetcher.abortAll();
         },
         data() {
             return {

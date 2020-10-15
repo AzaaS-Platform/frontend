@@ -28,6 +28,7 @@
     import TableContent from '../../elements/layout/TableContent.vue';
     import Loading from '../../elements/Loading.vue';
     import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
+    import Fetcher from '../../../main/connect/Fetcher.js';
 
     export default {
         name: "Users",
@@ -39,6 +40,9 @@
                 await this.fetchRoles();
                 this.loading = false;
             })()
+        },
+        beforeDestroy() {
+            Fetcher.abortAll();
         },
         data() {
             return {

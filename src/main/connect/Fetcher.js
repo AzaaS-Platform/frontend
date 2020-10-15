@@ -15,7 +15,8 @@ export default class Fetcher {
 
         let request = new Request(path, {
             method: 'GET',
-            headers
+            headers,
+            signal: Fetcher.controller.signal,
         });
         return await Fetcher.parseResponse(await fetch(request));
     }
@@ -24,7 +25,8 @@ export default class Fetcher {
         let request = new Request(path, {
             method: 'POST',
             body: JSON.stringify(data),
-            headers
+            headers,
+            signal: Fetcher.controller.signal,
         });
         return await Fetcher.parseResponse(await fetch(request));
     }
@@ -33,7 +35,8 @@ export default class Fetcher {
         let request = new Request(path, {
             method: 'PUT',
             body: JSON.stringify(data),
-            headers
+            headers,
+            signal: Fetcher.controller.signal,
         });
         return await fetch(request);
     }
@@ -41,7 +44,8 @@ export default class Fetcher {
     static async Delete(path, headers) {
         let request = new Request(path, {
             method: 'DELETE',
-            headers
+            headers,
+            signal: Fetcher.controller.signal,
         });
         return await fetch(request);
     }
@@ -54,4 +58,11 @@ export default class Fetcher {
             throw data.message;
         }
     }
+
+    static abortAll() {
+        Fetcher.controller.abort();
+        Fetcher.controller = new AbortController();
+    }
 }
+
+Fetcher.controller = new AbortController();

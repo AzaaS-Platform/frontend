@@ -50,10 +50,14 @@
 <script>
     import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
     import Loading from '../../elements/Loading.vue';
+    import Fetcher from '../../../main/connect/Fetcher.js';
 
     export default {
         name: "Register",
         components: {Loading},
+        beforeDestroy() {
+            Fetcher.abortAll();
+        },
         data() {
             return {
                 loading: false,
