@@ -1,5 +1,5 @@
 import Fetcher from './Fetcher.js';
-import Server from './Server.js';
+import Server from './utils/Server.js';
 
 export default class Connector {
     constructor(path, authenticator) {

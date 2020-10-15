@@ -14,7 +14,6 @@ export default class Fetcher {
         }
 
         let request = new Request(path, {
-            mode: 'cors',
             method: 'GET',
             headers
         });

@@ -7,6 +7,7 @@ import EditRole from "../components/pages/roles/EditRole.vue";
 import Login from '../components/pages/login/Login.vue';
 import NotFound from '../components/pages/errors/NotFound.vue';
 import BasicLayout from '../components/elements/layout/BasicLayout.vue';
+import Register from '../components/pages/login/Register.vue';
 
 export default [
     {
@@ -28,6 +29,7 @@ export default [
         path: '/admin', component: BasicLayout,
         children: [
             {path: 'login', component: Login},
+            {path: 'register', component: Register},
         ]
     },
     {path: '/', redirect: '/admin/login'},

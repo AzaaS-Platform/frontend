@@ -3,14 +3,24 @@ import Authenticator from './Authenticator.js';
 import UserNotAuthenticatedError from './errors/UserNotAuthenticatedError.js';
 import NoSuchResourceError from './errors/NoSuchResourceError.js';
 import Fetcher from './Fetcher.js';
-import Server from './Server.js';
-import Token from './Token.js';
+import Server from './utils/Server.js';
+import Token from '../storage/Token.js';
+import Client from '../storage/Client.js';
 
 export default class ConnectorFactory {
     static async authenticate(client, login, password) {
-        localStorage.setItem('client', client);
+        Client.save(client);
         ConnectorFactory.AUTHENTICATOR = new Authenticator(client);
         await ConnectorFactory.AUTHENTICATOR.authenticate(login, password);
+    }
+
+    static async register(client, login, password) {
+        await Fetcher.Post(`${Server.API_BASE_URL}clients`, {}, {
+            name: client,
+            adminUsername: login,
+            adminPassword: password
+        });
+        await ConnectorFactory.authenticate(client, login, password);
     }
 
     static async invalidate() {
@@ -25,10 +35,10 @@ export default class ConnectorFactory {
     }
 
     static getConnector(type) {
-        if(!ConnectorFactory.AUTHENTICATOR && !localStorage.getItem('client')) {
+        if(!ConnectorFactory.AUTHENTICATOR && !Client.restore()) {
             throw new UserNotAuthenticatedError("User is not authenticated");
         } else if(!ConnectorFactory.AUTHENTICATOR) {
-            ConnectorFactory.AUTHENTICATOR = new Authenticator(localStorage.getItem('client'));
+            ConnectorFactory.AUTHENTICATOR = new Authenticator(Client.restore());
         }
 
         switch(type) {

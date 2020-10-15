@@ -5,8 +5,7 @@
                 <div class="mdl-card__supporting-text color--dark-gray">
                     <div class="mdl-grid">
                         <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
-                            <span class="login-name text-color--white">Logowanie</span>
-                            <span class="login-secondary-text text-color--smoke">Wprowadź dane aby się zalogować</span>
+                            <span class="login-name text-color--white">Rejestracja</span>
                         </div>
                         <div v-show="!loading">
                             <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
@@ -19,19 +18,24 @@
                                     <label class="mdl-textfield__label" for="login">Login</label>
                                 </div>
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
-                                    <input class="mdl-textfield__input" type="password" id="password"
-                                           v-model="password">
+                                    <input class="mdl-textfield__input" type="text" id="password" v-model="password">
                                     <label class="mdl-textfield__label" for="password">Hasło</label>
                                 </div>
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect checkbox--colored-light-blue checkbox--inline"
+                                       for="checkbox-1">
+                                    <input type="checkbox" id="checkbox-1" class="mdl-checkbox__input" checked>
+
+                                </label>
+                                <span class="login-link">I agree all statements in <a href="#" class="underlined">terms of service</a></span>
                             </div>
                             <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell">
-                                <router-link :to="'register'" class="login-link">
-                                    Nie masz konta?
+                                <router-link :to="'login'" class="login-link">
+                                    Już mam konto
                                 </router-link>
                                 <div class="mdl-layout-spacer"></div>
                                 <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue"
-                                        type="button" @click="submitLogin">
-                                    Zaloguj się
+                                        type="button" @click="submitSignUp">
+                                    Zarejestruj się
                                 </button>
                             </div>
                         </div>
@@ -44,39 +48,31 @@
 </template>
 
 <script>
-    import Loading from '../../elements/Loading.vue';
     import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
-    import Token from '../../../main/storage/Token.js';
-    import Client from '../../../main/storage/Client.js';
+    import Loading from '../../elements/Loading.vue';
 
     export default {
-        name: "Login",
+        name: "Register",
         components: {Loading},
-        created() {
-            const token = Token.restore();
-            if(token && Token.checkExpiryTime(token)) {
-                this.$router.push('/dashboard/users');
-            }
-        },
         data() {
             return {
                 loading: false,
                 login: '',
                 password: '',
-                client: Client.restore() ?? ''
+                client: ''
             }
         },
         methods: {
-            async submitLogin() {
+            async submitSignUp() {
                 this.loading = true;
 
                 try {
-                    await ConnectorFactory.authenticate(this.client, this.login, this.password);
+                    await ConnectorFactory.register(this.client, this.login, this.password);
                     this.$router.push('/dashboard/users');
                 } catch(e) {
                     this.loading = false;
                 }
-            }
+            },
         }
     }
 </script>
