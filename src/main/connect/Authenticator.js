@@ -1,6 +1,6 @@
 import Fetcher from './Fetcher.js';
-import Server from './Server.js';
-import Token from './Token.js';
+import Server from './utils/Server.js';
+import Token from '../storage/Token.js';
 
 export default class Authenticator {
     constructor(client) {

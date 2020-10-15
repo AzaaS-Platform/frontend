@@ -1,0 +1,8 @@
+.login .login__inner {
+    padding:16px;
+    display:flex
+}
+
+.login, .login__inner {
+    height:100%;
+}
