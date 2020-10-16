@@ -9,12 +9,16 @@
     import NotFound from '../errors/NotFound.vue';
     import Loading from '../../elements/Loading.vue';
     import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
+    import Fetcher from '../../../main/connect/Fetcher.js';
 
     export default {
         name: "EditUser",
         components: {Loading, NotFound, AddUser},
         mounted() {
             this.fetchUser(this.$route.params.id);
+        },
+        beforeDestroy() {
+            Fetcher.abortAll();
         },
         data() {
             return {

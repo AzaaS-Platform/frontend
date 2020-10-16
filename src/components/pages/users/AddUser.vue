@@ -50,6 +50,7 @@
     import Loading from '../../elements/Loading.vue';
     import SelectList from '../../elements/form/SelectList.vue';
     import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
+    import Fetcher from '../../../main/connect/Fetcher.js';
 
     export default {
         name: "AddUser",
@@ -65,6 +66,9 @@
             componentHandler.upgradeDom();
 
             this.fetchRoles();
+        },
+        beforeDestroy() {
+            Fetcher.abortAll();
         },
         data() {
             return {

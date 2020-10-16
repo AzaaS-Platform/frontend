@@ -9,12 +9,16 @@
     import NotFound from '../errors/NotFound.vue';
     import Loading from '../../elements/Loading.vue';
     import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
+    import Fetcher from '../../../main/connect/Fetcher.js';
 
     export default {
         name: "EditRole",
         components: {Loading, NotFound, AddRole},
         mounted() {
             this.fetchRole(this.$route.params.id);
+        },
+        beforeDestroy() {
+            Fetcher.abortAll();
         },
         data() {
             return {
