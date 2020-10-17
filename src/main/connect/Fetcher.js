@@ -25,7 +25,10 @@ export default class Fetcher {
         let request = new Request(path, {
             method: 'POST',
             body: JSON.stringify(data),
-            headers,
+            headers: {
+                'Content-Type': 'application/json',
+                ...headers
+            },
             signal: Fetcher.controller.signal,
         });
         return await Fetcher.parseResponse(await fetch(request));
@@ -35,7 +38,10 @@ export default class Fetcher {
         let request = new Request(path, {
             method: 'PUT',
             body: JSON.stringify(data),
-            headers,
+            headers: {
+                'Content-Type': 'application/json',
+                ...headers
+            },
             signal: Fetcher.controller.signal,
         });
         return await fetch(request);
