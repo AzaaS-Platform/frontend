@@ -29,27 +29,18 @@
     import Loading from '../../elements/Loading.vue';
     import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
     import Fetcher from '../../../main/connect/Fetcher.js';
-    import UserNotAuthenticatedError from '../../../main/connect/errors/UserNotAuthenticatedError.js';
     import Utils from '../../../main/utils/Utils.js';
 
     export default {
         name: "Roles",
         components: {Loading, TableContent, Table},
         mounted() {
-            (async() => {
-                this.loading = true;
-
-                try {
-                    await this.fetchRoles();
-                } catch(e) {
-                    if(e instanceof UserNotAuthenticatedError || e.statusCode === 401) {
-                        ConnectorFactory.clear();
-                        Utils.handleLoginError(e.message);
-                    }
-                }
+            this.loading = true;
+            Utils.handleRequests(this.$router, async() => {
+                await this.fetchRoles();
 
                 this.loading = false;
-            })()
+            });
         },
         beforeDestroy() {
             Fetcher.abortAll();
@@ -66,19 +57,26 @@
             }
         },
         methods: {
-            async deleteClick(e, entity) {
+            deleteClick(e, entity) {
                 e.stopPropagation();
 
-                try {
+                this.loading = true;
+                Utils.handleRequests(this.$router, async() => {
                     const rolesConnector = ConnectorFactory.getConnector('roles');
-                    this.loading = true;
                     await rolesConnector.delete(entity);
                     this.table.rows = this.table.rows.filter(role => role.entity !== entity);
-                } catch(e) {
-                    this.table.rows = [];
-                } finally {
-                    this.loading = false;
-                }
+
+                    this.loading = true;
+                    this.messageBox = {
+                        message: 'Role deleted successfully',
+                        type: 'success',
+                    };
+                }).catch(e => {
+                    this.messageBox = {
+                        message: e,
+                        type: 'danger',
+                    };
+                });
             },
 
             async fetchRoles() {

@@ -1,26 +1,30 @@
 <template>
-    <TableContent header="Użytkownicy" add-link="../add-user">
-        <Table v-if="!loading" :headers="table.headers" :rows="table.rows">
-            <template #header="{header}">{{header}}</template>
-            <template #row="{row}">
-                <router-link :to="`../edit-user/${row.entity}`" tag="tr" class="cursor-pointer">
-                    <td class="mdl-data-table__cell--non-numeric">{{row.username}}</td>
-                    <td class="mdl-data-table__cell--non-numeric">
-                        <div v-for="group of row.groups" :key="group">
-                            {{roles.find(role => role.entity === group).name}}
-                        </div>
-                    </td>
-                    <td class="mdl-data-table__cell--non-numeric">
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red"
-                                @click="e => deleteClick(e, row.entity)">
-                            Usuń
-                        </button>
-                    </td>
-                </router-link>
-            </template>
-        </Table>
-        <Loading v-else/>
-    </TableContent>
+    <div>
+        <TableContent header="Użytkownicy" add-link="../add-user">
+            <Table v-if="!loading" :headers="table.headers" :rows="table.rows">
+                <template #header="{header}">{{header}}</template>
+                <template #row="{row}">
+                    <router-link :to="`../edit-user/${row.entity}`" tag="tr" class="cursor-pointer">
+                        <td class="mdl-data-table__cell--non-numeric">{{row.username}}</td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <div v-for="group of row.groups" :key="group">
+                                {{roles.find(role => role.entity === group).name}}
+                            </div>
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <button v-if="row.entity !== currentUserEntity"
+                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red"
+                                    @click="e => deleteClick(e, row.entity)">
+                                Usuń
+                            </button>
+                        </td>
+                    </router-link>
+                </template>
+            </Table>
+            <Loading v-else/>
+        </TableContent>
+        <MessageBox v-if="!!messageBox" :message="messageBox.message" :type="messageBox.type"/>
+    </div>
 </template>
 
 <script>
@@ -29,28 +33,21 @@
     import Loading from '../../elements/Loading.vue';
     import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
     import Fetcher from '../../../main/connect/Fetcher.js';
-    import UserNotAuthenticatedError from '../../../main/connect/errors/UserNotAuthenticatedError.js';
     import Utils from '../../../main/utils/Utils.js';
+    import Token from '../../../main/storage/Token.js';
+    import MessageBox from '../../elements/MessageBox.vue';
 
     export default {
         name: "Users",
-        components: {Loading, TableContent, Table},
+        components: {MessageBox, Loading, TableContent, Table},
         mounted() {
-            (async() => {
-                this.loading = true;
-
-                try {
-                    await this.fetchUsers();
-                    await this.fetchRoles();
-                } catch(e) {
-                    if(e instanceof UserNotAuthenticatedError || e.statusCode === 401) {
-                        ConnectorFactory.clear();
-                        Utils.handleLoginError(e.message);
-                    }
-                }
+            this.loading = true;
+            Utils.handleRequests(this.$router, async() => {
+                await this.fetchUsers();
+                await this.fetchRoles();
 
                 this.loading = false;
-            })()
+            });
         },
         beforeDestroy() {
             Fetcher.abortAll();
@@ -64,23 +61,32 @@
                     rows: [],
                 },
                 loading: true,
-                roles: []
+                roles: [],
+                currentUserEntity: Token.extractUser(Token.restore()),
+                messageBox: null,
             }
         },
         methods: {
-            async deleteClick(e, entity) {
+            deleteClick(e, entity) {
                 e.stopPropagation();
 
-                try {
-                    this.loading = true;
+                this.loading = true;
+                Utils.handleRequests(this.$router, async() => {
                     const usersConnector = ConnectorFactory.getConnector('users');
                     await usersConnector.delete(entity);
                     this.table.rows = this.table.rows.filter(user => user.entity !== entity);
-                } catch(e) {
-                    this.table.rows = [];
-                } finally {
+
                     this.loading = false;
-                }
+                    this.messageBox = {
+                        message: 'User deleted successfully',
+                        type: 'success',
+                    };
+                }).catch(e => {
+                    this.messageBox = {
+                        message: e,
+                        type: 'danger',
+                    };
+                });
             },
 
             async fetchUsers() {

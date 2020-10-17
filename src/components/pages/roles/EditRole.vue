@@ -10,12 +10,18 @@
     import Loading from '../../elements/Loading.vue';
     import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
     import Fetcher from '../../../main/connect/Fetcher.js';
+    import Utils from '../../../main/utils/Utils.js';
 
     export default {
         name: "EditRole",
         components: {Loading, NotFound, AddRole},
         mounted() {
-            this.fetchRole(this.$route.params.id);
+            this.loading = true;
+            Utils.handleRequests(this.$router, async() => {
+                await this.fetchRole(this.$route.params.id);
+
+                this.loading = false;
+            });
         },
         beforeDestroy() {
             Fetcher.abortAll();
@@ -28,14 +34,8 @@
         },
         methods: {
             async fetchRole(entity) {
-                try {
-                    const rolesConnector = ConnectorFactory.getConnector('roles');
-                    this.role = await rolesConnector.get(entity);
-                } catch(e) {
-                    this.role = null;
-                } finally {
-                    this.loading = false;
-                }
+                const rolesConnector = ConnectorFactory.getConnector('roles');
+                this.role = await rolesConnector.get(entity);
             }
         }
     }

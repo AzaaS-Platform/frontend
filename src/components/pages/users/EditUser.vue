@@ -10,12 +10,18 @@
     import Loading from '../../elements/Loading.vue';
     import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
     import Fetcher from '../../../main/connect/Fetcher.js';
+    import Utils from '../../../main/utils/Utils.js';
 
     export default {
         name: "EditUser",
         components: {Loading, NotFound, AddUser},
         mounted() {
-            this.fetchUser(this.$route.params.id);
+            this.loading = true;
+            Utils.handleRequests(this.$router, async() => {
+                await this.fetchUser(this.$route.params.id);
+
+                this.loading = false;
+            });
         },
         beforeDestroy() {
             Fetcher.abortAll();
@@ -28,14 +34,8 @@
         },
         methods: {
             async fetchUser(entity) {
-                try {
-                    const usersConnector = ConnectorFactory.getConnector('users');
-                    this.user = await usersConnector.get(entity);
-                } catch(e) {
-                    this.user = null;
-                } finally {
-                    this.loading = false;
-                }
+                const usersConnector = ConnectorFactory.getConnector('users');
+                this.user = await usersConnector.get(entity);
             }
         }
     }

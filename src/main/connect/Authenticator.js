@@ -3,9 +3,9 @@ import Server from '../utils/Server.js';
 import Token from '../storage/Token.js';
 
 export default class Authenticator {
-    constructor(client) {
+    constructor(client, token) {
         this.client = client;
-        this.token = Token.restore();
+        this.token = token;
         if(this.token !== null && Token.extractExpTime(this.token)) {
             this.expTime = Token.extractExpTime(this.token);
         }

@@ -76,7 +76,7 @@
         },
         methods: {
             async submitLogin() {
-                this.error = '';
+                this.errorMessage = '';
                 this.loading = true;
 
                 try {

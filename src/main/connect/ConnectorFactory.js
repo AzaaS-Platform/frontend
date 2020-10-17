@@ -10,7 +10,7 @@ import Client from '../storage/Client.js';
 export default class ConnectorFactory {
     static async authenticate(client, login, password) {
         Client.save(client);
-        ConnectorFactory.AUTHENTICATOR = new Authenticator(client);
+        ConnectorFactory.AUTHENTICATOR = new Authenticator(client, null);
         await ConnectorFactory.AUTHENTICATOR.authenticate(login, password);
     }
 
@@ -42,7 +42,9 @@ export default class ConnectorFactory {
         if(!ConnectorFactory.AUTHENTICATOR && !Client.restore()) {
             throw new UserNotAuthenticatedError("User is not authenticated");
         } else if(!ConnectorFactory.AUTHENTICATOR) {
-            ConnectorFactory.AUTHENTICATOR = new Authenticator(Client.restore());
+            const token = Token.restore();
+            if(token === null) throw new UserNotAuthenticatedError('Invalid token');
+            ConnectorFactory.AUTHENTICATOR = new Authenticator(Client.restore(), token);
         }
 
         switch(type) {

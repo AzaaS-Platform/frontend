@@ -72,7 +72,7 @@
         },
         methods: {
             async submitSignUp() {
-                this.error = '';
+                this.errorMessage = '';
                 this.loading = true;
 
                 try {

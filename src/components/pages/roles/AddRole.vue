@@ -44,6 +44,7 @@
     import EditableSelectList from '../../elements/form/EditableSelectList.vue';
     import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
     import Fetcher from '../../../main/connect/Fetcher.js';
+    import Utils from '../../../main/utils/Utils.js';
 
     export default {
         name: "AddRole",
@@ -72,24 +73,49 @@
             }
         },
         methods: {
-            async submitForm(e) {
+            submitForm(e) {
                 e.preventDefault();
                 // TODO validation
 
                 const rolesConnector = ConnectorFactory.getConnector('roles');
                 this.loading = true;
                 if(this.role !== null) {
-                    await rolesConnector.modify(this.role.entity, {
-                        name: this.roleName,
-                        permissions: [...this.mappedPermissions.map(permission => permission.value)]
+                    Utils.handleRequests(this.$router, async() => {
+                        await rolesConnector.modify(this.role.entity, {
+                            name: this.roleName,
+                            permissions: [...this.mappedPermissions.map(permission => permission.value)]
+                        });
+
+                        this.loading = false;
+                        this.messageBox = {
+                            message: 'Role modified successfully',
+                            type: 'success',
+                        };
+                    }).catch(e => {
+                        this.messageBox = {
+                            message: e,
+                            type: 'danger',
+                        };
                     });
                 } else {
-                    await rolesConnector.add({
-                        name: this.roleName,
-                        permissions: [...this.mappedPermissions.map(permission => permission.value)]
+                    Utils.handleRequests(this.$router, async() => {
+                        await rolesConnector.add({
+                            name: this.roleName,
+                            permissions: [...this.mappedPermissions.map(permission => permission.value)]
+                        });
+
+                        this.loading = false;
+                        this.messageBox = {
+                            message: 'Role added successfully',
+                            type: 'success',
+                        };
+                    }).catch(e => {
+                        this.messageBox = {
+                            message: e,
+                            type: 'danger',
+                        };
                     });
                 }
-                this.loading = false;
             }
         },
     }

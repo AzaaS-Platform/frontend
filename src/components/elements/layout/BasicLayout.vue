@@ -9,8 +9,8 @@
 </template>
 
 <script>
-    import Drawer from '../Drawer.vue';
-    import Header from '../Header.vue';
+    import Drawer from './Drawer.vue';
+    import Header from './Header.vue';
 
     export default {
         name: "BasicLayout",
