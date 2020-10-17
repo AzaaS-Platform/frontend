@@ -29,12 +29,27 @@
     import Loading from '../../elements/Loading.vue';
     import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
     import Fetcher from '../../../main/connect/Fetcher.js';
+    import UserNotAuthenticatedError from '../../../main/connect/errors/UserNotAuthenticatedError.js';
+    import Utils from '../../../main/utils/Utils.js';
 
     export default {
         name: "Roles",
         components: {Loading, TableContent, Table},
         mounted() {
-            this.fetchRoles();
+            (async() => {
+                this.loading = true;
+
+                try {
+                    await this.fetchRoles();
+                } catch(e) {
+                    if(e instanceof UserNotAuthenticatedError || e.statusCode === 401) {
+                        ConnectorFactory.clear();
+                        Utils.handleLoginError(e.message);
+                    }
+                }
+
+                this.loading = false;
+            })()
         },
         beforeDestroy() {
             Fetcher.abortAll();
@@ -67,14 +82,8 @@
             },
 
             async fetchRoles() {
-                try {
-                    const rolesConnector = ConnectorFactory.getConnector('roles');
-                    this.table.rows = await rolesConnector.getAll();
-                } catch(e) {
-                    this.table.rows = [];
-                } finally {
-                    this.loading = false;
-                }
+                const rolesConnector = ConnectorFactory.getConnector('roles');
+                this.table.rows = await rolesConnector.getAll();
             }
         }
     }

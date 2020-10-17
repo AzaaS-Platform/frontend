@@ -7,6 +7,9 @@
                         <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
                             <span class="login-name text-color--white">Rejestracja</span>
                         </div>
+                        <div v-if="!!errorMessage" class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
+                            <span class="color-text--red">{{errorMessage}}</span>
+                        </div>
                         <div v-show="!loading">
                             <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
@@ -63,17 +66,20 @@
                 loading: false,
                 login: '',
                 password: '',
-                client: ''
+                client: '',
+                errorMessage: '',
             }
         },
         methods: {
             async submitSignUp() {
+                this.error = '';
                 this.loading = true;
 
                 try {
                     await ConnectorFactory.register(this.client, this.login, this.password);
                     this.$router.push('/dashboard/users');
                 } catch(e) {
+                    this.errorMessage = e;
                     this.loading = false;
                 }
             },

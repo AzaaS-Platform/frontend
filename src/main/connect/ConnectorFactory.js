@@ -3,7 +3,7 @@ import Authenticator from './Authenticator.js';
 import UserNotAuthenticatedError from './errors/UserNotAuthenticatedError.js';
 import NoSuchResourceError from './errors/NoSuchResourceError.js';
 import Fetcher from './Fetcher.js';
-import Server from './utils/Server.js';
+import Server from '../utils/Server.js';
 import Token from '../storage/Token.js';
 import Client from '../storage/Client.js';
 
@@ -28,6 +28,10 @@ export default class ConnectorFactory {
             Authorization: `Bearer ${ConnectorFactory.AUTHENTICATOR.token}`
         });
 
+        ConnectorFactory.clear();
+    }
+
+    static clear() {
         Token.remove();
         ConnectorFactory.AUTHENTICATOR = null;
         ConnectorFactory.USERS_CONNECTOR = null;

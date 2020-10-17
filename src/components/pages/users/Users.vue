@@ -29,6 +29,8 @@
     import Loading from '../../elements/Loading.vue';
     import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
     import Fetcher from '../../../main/connect/Fetcher.js';
+    import UserNotAuthenticatedError from '../../../main/connect/errors/UserNotAuthenticatedError.js';
+    import Utils from '../../../main/utils/Utils.js';
 
     export default {
         name: "Users",
@@ -36,8 +38,17 @@
         mounted() {
             (async() => {
                 this.loading = true;
-                await this.fetchUsers();
-                await this.fetchRoles();
+
+                try {
+                    await this.fetchUsers();
+                    await this.fetchRoles();
+                } catch(e) {
+                    if(e instanceof UserNotAuthenticatedError || e.statusCode === 401) {
+                        ConnectorFactory.clear();
+                        Utils.handleLoginError(e.message);
+                    }
+                }
+
                 this.loading = false;
             })()
         },
@@ -61,8 +72,8 @@
                 e.stopPropagation();
 
                 try {
-                    const usersConnector = ConnectorFactory.getConnector('users');
                     this.loading = true;
+                    const usersConnector = ConnectorFactory.getConnector('users');
                     await usersConnector.delete(entity);
                     this.table.rows = this.table.rows.filter(user => user.entity !== entity);
                 } catch(e) {
@@ -73,21 +84,13 @@
             },
 
             async fetchUsers() {
-                try {
-                    const usersConnector = ConnectorFactory.getConnector('users');
-                    this.table.rows = await usersConnector.getAll();
-                } catch(e) {
-                    this.table.rows = [];
-                }
+                const usersConnector = ConnectorFactory.getConnector('users');
+                this.table.rows = await usersConnector.getAll();
             },
 
             async fetchRoles() {
-                try {
-                    const rolesConnector = ConnectorFactory.getConnector('roles');
-                    this.roles = await rolesConnector.getAll();
-                } catch(e) {
-                    this.roles = [];
-                }
+                const rolesConnector = ConnectorFactory.getConnector('roles');
+                this.roles = await rolesConnector.getAll();
             }
         }
     }
