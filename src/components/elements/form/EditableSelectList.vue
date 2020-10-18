@@ -5,14 +5,14 @@
                 <li class="mdl-list__item">
                     <div class="mdl-textfield mdl-js-textfield">
                         <input class="mdl-textfield__input" type="text" id="todo-input" v-model="element">
-                        <label class="mdl-textfield__label" for="todo-input">Dodaj element</label>
+                        <label class="mdl-textfield__label" for="todo-input">Add next</label>
                     </div>
                 </li>
             </template>
         </SelectList>
         <div class="mdl-card__actions">
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect" @click="removeSelected">
-                usuń zaznaczone
+                delete selected
             </button>
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--fab mdl-shadow--8dp mdl-button--colored"
                     @click="addElement">

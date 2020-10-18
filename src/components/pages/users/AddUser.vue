@@ -5,7 +5,7 @@
             <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
                 <div class="mdl-card mdl-shadow--2dp">
                     <div class="mdl-card__title">
-                        <h5 class="mdl-card__title-text text-color--white">Dodaj użytkownika</h5>
+                        <h5 class="mdl-card__title-text text-color--white">{{header}}</h5>
                     </div>
                     <div class="mdl-card__supporting-text">
                         <form class="form form--basic">
@@ -13,14 +13,14 @@
                                 <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone form__article">
                                     <div class="mdl-textfield mdl-js-textfield full-size">
                                         <input class="mdl-textfield__input" type="text" id="name" v-model="username">
-                                        <label class="mdl-textfield__label" for="name">Nazwa użytkownika</label>
+                                        <label class="mdl-textfield__label" for="name">Username</label>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone form__article">
                                     <div class="mdl-textfield mdl-js-textfield full-size">
                                         <input class="mdl-textfield__input" type="password" id="password"
                                                v-model="password">
-                                        <label class="mdl-textfield__label" for="password">Hasło</label>
+                                        <label class="mdl-textfield__label" for="password">Password</label>
                                     </div>
                                 </div>
                             </div>
@@ -31,7 +31,7 @@
             <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
                 <div class="mdl-card mdl-shadow--2dp todo">
                     <div class="mdl-card__title">
-                        <h2 class="mdl-card__title-text">Role</h2>
+                        <h2 class="mdl-card__title-text">Roles</h2>
                     </div>
                     <SelectList v-model="selected" :elements="mappedAllRoles" :init-selected="selected"
                                 :removable="false"/>
@@ -41,7 +41,7 @@
                 <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-light-blue"
                         @click="submitForm">
                     <i class="material-icons">assignment_returned</i>
-                    Zapisz
+                    Save
                 </button>
             </div>
         </div>
@@ -68,6 +68,10 @@
             user: {
                 type: Object,
                 default: null
+            },
+            header: {
+                type: String,
+                default: 'Add user'
             },
         },
         mounted() {

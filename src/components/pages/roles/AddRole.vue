@@ -5,7 +5,7 @@
             <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
                 <div class="mdl-card mdl-shadow--2dp">
                     <div class="mdl-card__title">
-                        <h5 class="mdl-card__title-text text-color--white">Dodaj role</h5>
+                        <h5 class="mdl-card__title-text text-color--white">{{header}}</h5>
                     </div>
                     <div class="mdl-card__supporting-text">
                         <form class="form form--basic">
@@ -13,7 +13,7 @@
                                 <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone form__article">
                                     <div ref="mdlComponents" class="mdl-textfield mdl-js-textfield full-size">
                                         <input class="mdl-textfield__input" type="text" id="name" v-model="roleName">
-                                        <label class="mdl-textfield__label" for="name">Nazwa</label>
+                                        <label class="mdl-textfield__label" for="name">Name</label>
                                     </div>
                                 </div>
                             </div>
@@ -24,7 +24,7 @@
             <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone">
                 <div class="mdl-card mdl-shadow--2dp todo">
                     <div class="mdl-card__title">
-                        <h2 class="mdl-card__title-text">Uprawnienia</h2>
+                        <h2 class="mdl-card__title-text">Permissions</h2>
                     </div>
                     <EditableSelectList :elements="mappedPermissions" v-model="mappedPermissions"/>
                 </div>
@@ -33,7 +33,7 @@
                 <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-light-blue"
                         @click="submitForm">
                     <i class="material-icons">assignment_returned</i>
-                    Zapisz
+                    Save
                 </button>
             </div>
         </div>
@@ -59,7 +59,11 @@
         props: {
             role: {
                 type: Object,
-                default: null
+                default: null,
+            },
+            header: {
+                type: String,
+                default: 'Add role'
             },
         },
         mounted() {

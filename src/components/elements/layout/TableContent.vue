@@ -7,7 +7,7 @@
                     <div class="mdl-layout-spacer"></div>
                     <router-link :to="addLink" tag="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-green">
                         <i class="material-icons">add</i>
-                        Dodaj
+                        Add
                     </router-link>
                 </div>
                 <div class="mdl-card__supporting-text no-padding">

@@ -1,5 +1,5 @@
 <template>
-    <AddUser v-if="user !== null && !loading" :user="user"/>
+    <AddUser v-if="user !== null && !loading" :user="user" header="Edit user"/>
     <Loading v-else-if="loading"/>
     <NotFound v-else/>
 </template>

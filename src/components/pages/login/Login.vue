@@ -5,8 +5,8 @@
                 <div class="mdl-card__supporting-text color--dark-gray">
                     <div class="mdl-grid">
                         <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
-                            <span class="login-name text-color--white">Logowanie</span>
-                            <span class="login-secondary-text text-color--smoke">Wprowadź dane aby się zalogować</span>
+                            <span class="login-name text-color--white">Sign in</span>
+                            <span class="login-secondary-text text-color--smoke">Enter fields to sign in</span>
                         </div>
                         <div v-if="!!errorMessage" class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
                             <span class="color-text--red">{{errorMessage}}</span>
@@ -15,26 +15,26 @@
                             <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
                                     <input class="mdl-textfield__input" type="text" id="client" v-model="client">
-                                    <label class="mdl-textfield__label" for="client">Klient</label>
+                                    <label class="mdl-textfield__label" for="client">Client</label>
                                 </div>
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
                                     <input class="mdl-textfield__input" type="text" id="login" v-model="login">
-                                    <label class="mdl-textfield__label" for="login">Login</label>
+                                    <label class="mdl-textfield__label" for="login">Username</label>
                                 </div>
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
                                     <input class="mdl-textfield__input" type="password" id="password"
                                            v-model="password">
-                                    <label class="mdl-textfield__label" for="password">Hasło</label>
+                                    <label class="mdl-textfield__label" for="password">Password</label>
                                 </div>
                             </div>
                             <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell">
                                 <router-link :to="'register'" class="login-link">
-                                    Nie masz konta?
+                                    Don't have account?
                                 </router-link>
                                 <div class="mdl-layout-spacer"></div>
                                 <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue"
                                         type="button" @click="submitLogin">
-                                    Zaloguj się
+                                    Sign in
                                 </button>
                             </div>
                         </div>

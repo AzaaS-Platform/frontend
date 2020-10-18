@@ -1,6 +1,6 @@
 <template>
     <div>
-        <TableContent header="Użytkownicy" add-link="../add-user">
+        <TableContent header="Users" add-link="../add-user">
             <Table v-if="!loading" :headers="table.headers" :rows="table.rows">
                 <template #header="{header}">{{header}}</template>
                 <template #row="{row}">
@@ -15,7 +15,7 @@
                             <button v-if="row.entity !== currentUserEntity"
                                     class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red"
                                     @click="e => deleteClick(e, row.entity)">
-                                Usuń
+                                Delete
                             </button>
                         </td>
                     </router-link>
@@ -58,7 +58,7 @@
             return {
                 table: {
                     headers: [
-                        'Nazwa użytkownika', 'Role', ''
+                        'Username', 'Roles', ''
                     ],
                     rows: [],
                 },
