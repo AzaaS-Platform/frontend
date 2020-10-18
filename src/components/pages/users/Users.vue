@@ -23,7 +23,7 @@
             </Table>
             <Loading v-else/>
         </TableContent>
-        <MessageBox v-if="!!messageBox" :message="messageBox.message" :type="messageBox.type"/>
+        <MessageBox v-if="!!messageBox" :key="messageBoxKey" :message="messageBox.message" :type="messageBox.type"/>
     </div>
 </template>
 
@@ -35,7 +35,9 @@
     import Fetcher from '../../../main/connect/Fetcher.js';
     import Utils from '../../../main/utils/Utils.js';
     import Token from '../../../main/storage/Token.js';
-    import MessageBox from '../../elements/MessageBox.vue';
+    import MessageBox, {TYPE_DANGER, TYPE_SUCCESS} from '../../elements/MessageBox.vue';
+
+    const USER_DELETED = 'User deleted successfully';
 
     export default {
         name: "Users",
@@ -64,29 +66,33 @@
                 roles: [],
                 currentUserEntity: Token.extractUser(Token.restore()),
                 messageBox: null,
+                messageBoxKey: 0,
             }
         },
         methods: {
-            deleteClick(e, entity) {
+            async deleteClick(e, entity) {
                 e.stopPropagation();
 
                 this.loading = true;
-                Utils.handleRequests(this.$router, async() => {
-                    const usersConnector = ConnectorFactory.getConnector('users');
-                    await usersConnector.delete(entity);
-                    this.table.rows = this.table.rows.filter(user => user.entity !== entity);
+                try {
+                    await Utils.handleRequests(this.$router, async() => {
+                        const usersConnector = ConnectorFactory.getConnector('users');
+                        await usersConnector.delete(entity);
+                        this.table.rows = this.table.rows.filter(user => user.entity !== entity);
+                    });
 
-                    this.loading = false;
                     this.messageBox = {
-                        message: 'User deleted successfully',
-                        type: 'success',
+                        message: USER_DELETED,
+                        type: TYPE_SUCCESS,
                     };
-                }).catch(e => {
+                } catch(e) {
                     this.messageBox = {
-                        message: e,
-                        type: 'danger',
+                        message: e.message,
+                        type: TYPE_DANGER,
                     };
-                });
+                }
+                ++this.messageBoxKey;
+                this.loading = false;
             },
 
             async fetchUsers() {

@@ -83,7 +83,7 @@
                     await ConnectorFactory.authenticate(this.client, this.login, this.password);
                     this.$router.push('/dashboard/users');
                 } catch(e) {
-                    this.errorMessage = e;
+                    this.errorMessage = e.message;
                     this.loading = false;
                 }
             }

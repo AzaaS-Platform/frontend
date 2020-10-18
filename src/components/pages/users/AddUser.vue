@@ -46,7 +46,7 @@
             </div>
         </div>
         <Loading v-else/>
-        <MessageBox v-if="!!messageBox" :message="messageBox.message" :type="messageBox.type"/>
+        <MessageBox v-if="!!messageBox" :key="messageBoxKey" :message="messageBox.message" :type="messageBox.type"/>
     </div>
 </template>
 
@@ -56,7 +56,10 @@
     import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
     import Fetcher from '../../../main/connect/Fetcher.js';
     import Utils from '../../../main/utils/Utils.js';
-    import MessageBox from '../../elements/MessageBox.vue';
+    import MessageBox, {TYPE_DANGER, TYPE_SUCCESS} from '../../elements/MessageBox.vue';
+
+    const USER_MODIFIED = 'User modified successfully';
+    const USER_ADDED = 'User added successfully';
 
     export default {
         name: "AddUser",
@@ -89,54 +92,52 @@
                 mappedAllRoles: [],
                 loading: true,
                 messageBox: null,
+                messageBoxKey: 0,
             }
         },
         methods: {
-            submitForm(e) {
+            async submitForm(e) {
                 e.preventDefault();
                 // TODO validation
 
                 const usersConnector = ConnectorFactory.getConnector('users');
                 this.loading = true;
-                if(this.user !== null) {
-                    Utils.handleRequests(this.$router, async() => {
-                        await usersConnector.modify(this.user.entity, {
-                            groups: this.selected.map(element => element.value) ?? [],
-                            username: this.username ? this.username : undefined,
-                            password: this.password ? this.password : undefined
+                try {
+                    if(this.user !== null) {
+                        await Utils.handleRequests(this.$router, async() => {
+                            await usersConnector.modify(this.user.entity, {
+                                groups: this.selected.map(element => element.value) ?? [],
+                                username: this.username ? this.username : undefined,
+                                password: this.password ? this.password : undefined
+                            });
                         });
 
-                        this.loading = false;
                         this.messageBox = {
-                            message: 'User modified successfully',
-                            type: 'success',
+                            message: USER_MODIFIED,
+                            type: TYPE_SUCCESS,
                         };
-                    }).catch(e => {
-                        this.messageBox = {
-                            message: e,
-                            type: 'danger',
-                        };
-                    });
-                } else {
-                    Utils.handleRequests(this.$router, async() => {
-                        await usersConnector.add({
-                            groups: this.selected.map(element => element.value) ?? [],
-                            username: this.username,
-                            password: this.password
+                    } else {
+                        await Utils.handleRequests(this.$router, async() => {
+                            await usersConnector.add({
+                                groups: this.selected.map(element => element.value) ?? [],
+                                username: this.username,
+                                password: this.password
+                            });
                         });
 
-                        this.loading = false;
                         this.messageBox = {
-                            message: 'User added successfully',
-                            type: 'success',
+                            message: USER_ADDED,
+                            type: TYPE_SUCCESS,
                         };
-                    }).catch(e => {
-                        this.messageBox = {
-                            message: e,
-                            type: 'danger',
-                        };
-                    });
+                    }
+                } catch(e) {
+                    this.messageBox = {
+                        message: e.message,
+                        type: TYPE_DANGER,
+                    };
                 }
+                ++this.messageBoxKey;
+                this.loading = false;
             },
 
             async fetchRoles() {

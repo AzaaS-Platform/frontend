@@ -5,6 +5,9 @@
 </template>
 
 <script>
+    export const TYPE_SUCCESS = 'success';
+    export const TYPE_DANGER = 'danger';
+
     export default {
         name: "MessageBox",
         props: {
