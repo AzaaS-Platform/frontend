@@ -1,5 +1,5 @@
 <template>
-    <AddRole v-if="role !== null && !loading" :role="role"/>
+    <AddRole v-if="role !== null && !loading" :role="role" header="Edit role"/>
     <Loading v-else-if="loading"/>
     <NotFound v-else/>
 </template>

@@ -7,11 +7,11 @@
                     <nav class="mdl-navigation">
                         <router-link to="/dashboard/roles" tag="a" class="mdl-navigation__link">
                             <i class="material-icons" role="presentation">dashboard</i>
-                            Role
+                            Roles
                         </router-link>
                         <router-link to="/dashboard/users" tag="a" class="mdl-navigation__link">
                             <i class="material-icons" role="presentation">person</i>
-                            Użytkownicy
+                            Users
                         </router-link>
                     </nav>
                 </div>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <TableContent header="Role" add-link="../add-role">
+        <TableContent header="Roles" add-link="../add-role">
             <Table v-if="!loading" :headers="table.headers" :rows="table.rows">
                 <template #header="{header}">{{header}}</template>
                 <template #row="{row}">
@@ -14,7 +14,7 @@
                         <td class="mdl-data-table__cell--non-numeric">
                             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red"
                                     @click="e => deleteClick(e, row.entity)">
-                                Usuń
+                                Delete
                             </button>
                         </td>
                     </router-link>
@@ -55,7 +55,7 @@
             return {
                 table: {
                     headers: [
-                        'Nazwa roli', 'Uprawnienia', ''
+                        'Role name', 'Permissions', ''
                     ],
                     rows: [],
                 },
