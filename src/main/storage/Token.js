@@ -4,6 +4,12 @@ export default class Token {
         return data.exp;
     }
 
+    static extractUser(token) {
+        if(!token) return null;
+        const data = JSON.parse(atob(token.split('.')[1]));
+        return data.payload.usr;
+    }
+
     static save(token) {
         localStorage.setItem(Token.STORAGE_KEY, token);
     }

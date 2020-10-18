@@ -61,7 +61,10 @@ export default class Fetcher {
         if(data.statusCode >= 200 && data.statusCode < 300) {
             return data.payload;
         } else {
-            throw data.message;
+            throw {
+                statusCode: data.statusCode,
+                message: data.message,
+            };
         }
     }
 

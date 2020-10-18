@@ -3,14 +3,14 @@ import Authenticator from './Authenticator.js';
 import UserNotAuthenticatedError from './errors/UserNotAuthenticatedError.js';
 import NoSuchResourceError from './errors/NoSuchResourceError.js';
 import Fetcher from './Fetcher.js';
-import Server from './utils/Server.js';
+import Server from '../utils/Server.js';
 import Token from '../storage/Token.js';
 import Client from '../storage/Client.js';
 
 export default class ConnectorFactory {
     static async authenticate(client, login, password) {
         Client.save(client);
-        ConnectorFactory.AUTHENTICATOR = new Authenticator(client);
+        ConnectorFactory.AUTHENTICATOR = new Authenticator(client, null);
         await ConnectorFactory.AUTHENTICATOR.authenticate(login, password);
     }
 
@@ -28,6 +28,10 @@ export default class ConnectorFactory {
             Authorization: `Bearer ${ConnectorFactory.AUTHENTICATOR.token}`
         });
 
+        ConnectorFactory.clear();
+    }
+
+    static clear() {
         Token.remove();
         ConnectorFactory.AUTHENTICATOR = null;
         ConnectorFactory.USERS_CONNECTOR = null;
@@ -38,7 +42,9 @@ export default class ConnectorFactory {
         if(!ConnectorFactory.AUTHENTICATOR && !Client.restore()) {
             throw new UserNotAuthenticatedError("User is not authenticated");
         } else if(!ConnectorFactory.AUTHENTICATOR) {
-            ConnectorFactory.AUTHENTICATOR = new Authenticator(Client.restore());
+            const token = Token.restore();
+            if(token === null) throw new UserNotAuthenticatedError('Invalid token');
+            ConnectorFactory.AUTHENTICATOR = new Authenticator(Client.restore(), token);
         }
 
         switch(type) {
