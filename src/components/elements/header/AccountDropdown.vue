@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="avatar-dropdown" id="icon">
-            <span>Luke</span>
+            <span>Profile</span>
             <i class="material-icons">person</i>
         </div>
         <ul class="mdl-menu mdl-list mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp account-dropdown"
