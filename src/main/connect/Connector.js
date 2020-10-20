@@ -11,7 +11,7 @@ export default class Connector {
         return await Fetcher.Get(`${Server.API_BASE_URL}clients/${this.authenticator.client}/${this.path}`, await this.authenticator.getAuthorizationHeader());
     }
 
-    async get(entity) {
+    async get(entity = '') {
         return await Fetcher.Get(`${Server.API_BASE_URL}clients/${this.authenticator.client}/${this.path}/${entity}`, await this.authenticator.getAuthorizationHeader());
     }
 
@@ -19,11 +19,11 @@ export default class Connector {
         return await Fetcher.Post(`${Server.API_BASE_URL}clients/${this.authenticator.client}/${this.path}`, await this.authenticator.getAuthorizationHeader(), data);
     }
 
-    async modify(entity, data) {
+    async modify(entity = '', data) {
         await Fetcher.Put(`${Server.API_BASE_URL}clients/${this.authenticator.client}/${this.path}/${entity}`, await this.authenticator.getAuthorizationHeader(), data);
     }
 
-    async delete(entity) {
+    async delete(entity = '') {
         await Fetcher.Delete(`${Server.API_BASE_URL}clients/${this.authenticator.client}/${this.path}/${entity}`, await this.authenticator.getAuthorizationHeader());
     }
 }

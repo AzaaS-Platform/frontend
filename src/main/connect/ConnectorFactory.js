@@ -8,10 +8,10 @@ import Token from '../storage/Token.js';
 import Client from '../storage/Client.js';
 
 export default class ConnectorFactory {
-    static async authenticate(client, login, password) {
+    static async authenticate(client, login, password, token = undefined) {
         Client.save(client);
         ConnectorFactory.AUTHENTICATOR = new Authenticator(client, null);
-        await ConnectorFactory.AUTHENTICATOR.authenticate(login, password);
+        await ConnectorFactory.AUTHENTICATOR.authenticate(login, password, token);
     }
 
     static async register(client, login, password) {
@@ -36,6 +36,7 @@ export default class ConnectorFactory {
         ConnectorFactory.AUTHENTICATOR = null;
         ConnectorFactory.USERS_CONNECTOR = null;
         ConnectorFactory.GROUPS_CONNECTOR = null;
+        ConnectorFactory.MFA_CONNECTOR = null;
     }
 
     static getConnector(type) {
@@ -58,6 +59,11 @@ export default class ConnectorFactory {
                     ConnectorFactory.GROUPS_CONNECTOR = new Connector('groups', ConnectorFactory.AUTHENTICATOR);
                 }
                 return ConnectorFactory.GROUPS_CONNECTOR;
+            case "mfa":
+                if(!ConnectorFactory.MFA_CONNECTOR) {
+                    ConnectorFactory.MFA_CONNECTOR = new Connector(`users/${Token.extractUser(Token.restore())}/mfa`, ConnectorFactory.AUTHENTICATOR);
+                }
+                return ConnectorFactory.MFA_CONNECTOR;
             default:
                 throw new NoSuchResourceError('There is no REST API for this resource');
         }
