@@ -21,7 +21,8 @@
                                     <label class="mdl-textfield__label" for="login">Login</label>
                                 </div>
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
-                                    <input class="mdl-textfield__input" type="text" id="password" v-model="password">
+                                    <input class="mdl-textfield__input" type="password" id="password"
+                                           v-model="password">
                                     <label class="mdl-textfield__label" for="password">Password</label>
                                 </div>
                                 <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect checkbox--colored-light-blue checkbox--inline"
@@ -79,7 +80,7 @@
                     await ConnectorFactory.register(this.client, this.login, this.password);
                     this.$router.push('/dashboard/users');
                 } catch(e) {
-                    this.errorMessage = e;
+                    this.errorMessage = e.message;
                     this.loading = false;
                 }
             },

@@ -11,10 +11,11 @@ export default class Authenticator {
         }
     }
 
-    async authenticate(username, password) {
+    async authenticate(username, password, token = undefined) {
         this.token = (await Fetcher.Post(`${Server.API_BASE_URL}clients/${this.client}/token`, {}, {
             username,
-            password
+            password,
+            token
         })).token;
 
         Token.save(this.token);

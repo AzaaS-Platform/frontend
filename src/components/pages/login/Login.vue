@@ -8,8 +8,8 @@
                             <span class="login-name text-color--white">Sign in</span>
                             <span class="login-secondary-text text-color--smoke">Enter fields to sign in</span>
                         </div>
-                        <div v-if="!!errorMessage" class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
-                            <span class="color-text--red">{{errorMessage}}</span>
+                        <div v-if="!!message" class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
+                            <span :class="`color-text--${message.type}`">{{message.text}}</span>
                         </div>
                         <div v-show="!loading">
                             <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
@@ -25,6 +25,11 @@
                                     <input class="mdl-textfield__input" type="password" id="password"
                                            v-model="password">
                                     <label class="mdl-textfield__label" for="password">Password</label>
+                                </div>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
+                                    <input class="mdl-textfield__input" type="password" id="token"
+                                           v-model="token">
+                                    <label class="mdl-textfield__label" for="password">2FA code (if enabled)</label>
                                 </div>
                             </div>
                             <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell">
@@ -66,24 +71,41 @@
             Fetcher.abortAll();
         },
         data() {
+            let message = null;
+            if(this.$route.query.error) {
+                message = {
+                    text: atob(this.$route.query.error),
+                    type: 'red',
+                };
+            } else if(this.$route.query.success) {
+                message = {
+                    text: atob(this.$route.query.success),
+                    type: 'green',
+                };
+            }
+
             return {
                 loading: false,
                 login: '',
                 password: '',
+                token: '',
                 client: Client.restore() ?? '',
-                errorMessage: this.$route.query.error ? atob(this.$route.query.error) : '',
+                message,
             }
         },
         methods: {
             async submitLogin() {
-                this.errorMessage = '';
+                this.message = null;
                 this.loading = true;
 
                 try {
-                    await ConnectorFactory.authenticate(this.client, this.login, this.password);
+                    await ConnectorFactory.authenticate(this.client, this.login, this.password, this.token);
                     this.$router.push('/dashboard/users');
                 } catch(e) {
-                    this.errorMessage = e.message;
+                    this.message = {
+                        text: e.message,
+                        type: 'red',
+                    };
                     this.loading = false;
                 }
             }

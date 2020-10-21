@@ -8,6 +8,7 @@ import Login from '../components/pages/login/Login.vue';
 import NotFound from '../components/pages/errors/NotFound.vue';
 import BasicLayout from '../components/elements/layout/BasicLayout.vue';
 import Register from '../components/pages/login/Register.vue';
+import Settings from '../components/pages/settings/Settings.vue';
 
 export default [
     {
@@ -21,6 +22,7 @@ export default [
             {path: 'edit-user/:id', component: EditUser},
             {path: 'users/:page', component: Users},
             {path: 'users', redirect: '/dashboard/users/1'},
+            {path: 'settings', component: Settings},
             {path: '*', component: NotFound},
             {path: '', component: NotFound},
         ]
