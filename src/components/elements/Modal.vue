@@ -89,18 +89,6 @@
         }
     }
 
-    .modal__close {
-        width:30px;
-        height:30px;
-    }
-
-    .modal__header {
-        padding:20px 20px 10px;
-        display:flex;
-        align-items:flex-start;
-        justify-content:space-between;
-    }
-
     .modal__body {
         padding:10px 20px 10px;
         overflow:auto;
