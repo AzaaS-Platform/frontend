@@ -10,3 +10,7 @@
 .cursor-pointer {
     cursor:pointer;
 }
+
+.mdl-layout__content {
+    z-index:inherit;
+}

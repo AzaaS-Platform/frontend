@@ -1,16 +1,16 @@
 <template>
     <transition name="fade">
         <div class="modal" v-if="show">
-            <div class="modal__backdrop" @click="closeModal()"/>
+            <div class="modal__backdrop" @click="closeModal()">
+                <div class="modal__dialog">
+                    <div class="modal__body">
+                        <slot/>
+                    </div>
 
-            <div class="modal__dialog">
-                <div class="modal__body">
-                    <slot/>
-                </div>
-
-                <div class="modal__footer">
-                    <div class="mdl-dialog__actions">
-                        <button type="button" class="mdl-button" @click="closeModal">Close window</button>
+                    <div class="modal__footer">
+                        <div class="mdl-dialog__actions">
+                            <button type="button" class="mdl-button" @click="closeModal">Close window</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -53,7 +53,6 @@
         overflow-x:hidden;
         overflow-y:auto;
         position:fixed;
-        display:flex;
         top:0;
         right:0;
         bottom:0;
@@ -63,23 +62,21 @@
 
     .modal__backdrop {
         background-color:rgba(0, 0, 0, 0.3);
-        position:fixed;
-        top:0;
-        right:0;
-        bottom:0;
-        left:0;
-        z-index:1;
+        z-index:10;
+        width:100%;
+        height:100%;
+        display:flex;
     }
 
     .modal__dialog {
-        background-color:#ffffff;
+        background-color:#000000;
         position:relative;
         max-width:600px;
         margin:50px auto;
         display:flex;
         flex-direction:column;
         border-radius:5px;
-        z-index:2;
+        z-index:11;
         align-self:center;
     }
 

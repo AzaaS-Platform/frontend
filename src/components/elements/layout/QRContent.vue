@@ -21,9 +21,6 @@
     export default {
         name: "QRContent",
         components: {Loading},
-        props: {
-            img: String,
-        },
         data() {
             return {
                 loading: true,
