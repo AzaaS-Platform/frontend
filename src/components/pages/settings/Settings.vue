@@ -18,8 +18,7 @@
         </div>
 
         <Modal ref="settingsModal" :onClose="onModalClose">
-            <QRContent
-                    img="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Qr-witaj-w-wikiped.svg/800px-Qr-witaj-w-wikiped.svg.png"/>
+            <QRContent/>
         </Modal>
     </div>
 </template>

@@ -11,7 +11,7 @@
                         <div v-if="!!message" class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
                             <span :class="`color-text--${message.type}`">{{message.text}}</span>
                         </div>
-                        <div v-show="!loading">
+                        <form v-show="!loading" @submit="submitLogin">
                             <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
                                     <input class="mdl-textfield__input" type="text" id="client" v-model="client">
@@ -38,11 +38,11 @@
                                 </router-link>
                                 <div class="mdl-layout-spacer"></div>
                                 <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue"
-                                        type="button" @click="submitLogin">
+                                        type="submit" @click="submitLogin">
                                     Sign in
                                 </button>
                             </div>
-                        </div>
+                        </form>
                         <Loading v-show="loading"/>
                     </div>
                 </div>
@@ -94,7 +94,9 @@
             }
         },
         methods: {
-            async submitLogin() {
+            async submitLogin(e) {
+                e.preventDefault();
+
                 this.message = null;
                 this.loading = true;
 

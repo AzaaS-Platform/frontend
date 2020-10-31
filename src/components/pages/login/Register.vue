@@ -10,7 +10,7 @@
                         <div v-if="!!errorMessage" class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
                             <span class="color-text--red">{{errorMessage}}</span>
                         </div>
-                        <div v-show="!loading">
+                        <form v-show="!loading" @submit="submitSignUp">
                             <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
                                     <input class="mdl-textfield__input" type="text" id="client" v-model="client">
@@ -38,11 +38,11 @@
                                 </router-link>
                                 <div class="mdl-layout-spacer"></div>
                                 <button class="mdl-button mdl-js-button mdl-button--raised color--light-blue"
-                                        type="button" @click="submitSignUp">
+                                        type="submit" @click="submitSignUp">
                                     Sign up
                                 </button>
                             </div>
-                        </div>
+                        </form>
                         <Loading v-show="loading"/>
                     </div>
                 </div>
@@ -72,7 +72,9 @@
             }
         },
         methods: {
-            async submitSignUp() {
+            async submitSignUp(e) {
+                e.preventDefault();
+
                 this.errorMessage = '';
                 this.loading = true;
 
