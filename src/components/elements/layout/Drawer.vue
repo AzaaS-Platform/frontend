@@ -1,6 +1,6 @@
 <template>
     <div class="mdl-layout__drawer">
-        <header>darkboard</header>
+        <header>Azaas</header>
         <div class="scroll__wrapper" id="scroll__wrapper">
             <div class="scroller" id="scroller">
                 <div class="scroll__container" id="scroll__container">
