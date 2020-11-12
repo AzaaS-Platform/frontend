@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <Modal ref="settingsModal" :onClose="onModalClose">
+        <Modal ref="settingsModal">
             <QRContent/>
         </Modal>
     </div>
@@ -67,9 +67,6 @@
                         const mfaConnector = ConnectorFactory.getConnector('mfa');
                         await mfaConnector.delete();
                         this.mfaEnabled = false;
-
-                        ConnectorFactory.clear();
-                        this.$router.push(Utils.getLoginSuccessPage('2FA disabled, please sign up again'));
                     } catch(e) {
                         this.$refs.mfaCheck.MaterialSwitch.off();
                     }
@@ -87,11 +84,6 @@
                     this.$refs.mfaCheck.MaterialSwitch.on();
                 }
                 this.mfaEnabled = mfa.has2FAEnabled;
-            },
-
-            onModalClose() {
-                ConnectorFactory.clear();
-                this.$router.push(Utils.getLoginSuccessPage('2FA enabled, please sign up again'));
             }
         },
     }

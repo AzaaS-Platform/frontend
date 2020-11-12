@@ -6,10 +6,6 @@ export default class Utils {
         return `/admin/login?error=${btoa(message)}`;
     }
 
-    static getLoginSuccessPage(message) {
-        return `/admin/login?success=${btoa(message)}`;
-    }
-
     static async handleRequests(router, callback) {
         try {
             await callback();
