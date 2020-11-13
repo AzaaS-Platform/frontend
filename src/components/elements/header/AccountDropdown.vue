@@ -6,7 +6,7 @@
         </div>
         <ul class="mdl-menu mdl-list mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect mdl-shadow--2dp account-dropdown"
             for="icon">
-            <router-link :to="`../settings`" tag="li" class="mdl-menu__item mdl-list__item cursor-pointer">
+            <router-link :to="`/dashboard/settings`" tag="li" class="mdl-menu__item mdl-list__item cursor-pointer">
                 <span class="mdl-list__item-primary-content">
                     <i class="material-icons mdl-list__item-icon">settings</i>
                     Settings

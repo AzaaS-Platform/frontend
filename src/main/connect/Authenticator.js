@@ -1,6 +1,7 @@
 import Fetcher from './Fetcher.js';
 import Server from '../utils/Server.js';
 import Token from '../storage/Token.js';
+import UserNotAuthenticatedError from './errors/UserNotAuthenticatedError.js';
 
 export default class Authenticator {
     constructor(client, token) {
@@ -23,6 +24,8 @@ export default class Authenticator {
     }
 
     async getAuthorizationHeader() {
+        if(this.token === null) throw new UserNotAuthenticatedError("User is not authenticated")
+
         if(!Token.checkExpiryTime(this.token, Authenticator.REFRESH_SECONDS)) {
             await this.refreshToken();
         }
