@@ -32,8 +32,9 @@ export default [
         children: [
             {path: 'login', component: Login},
             {path: 'register', component: Register},
+            {path: 'error', component: NotFound},
         ]
     },
     {path: '/', redirect: '/admin/login'},
-    {path: '*', component: NotFound},
+    {path: '*', redirect: '/admin/error'},
 ]
