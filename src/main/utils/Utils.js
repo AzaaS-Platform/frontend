@@ -22,7 +22,7 @@ export default class Utils {
     static redirect(url, data) {
         let formString = `<form name="redirect-form" action="${url}" style="display:none" method="post">`
         for (let param of Object.keys(data)) {
-            formString += `<input type="text" name="token" value="${data[param]}" />`;
+            formString += `<input type="text" name="${param}" value="${data[param]}" />`;
         }
         formString += '</form>'
 
