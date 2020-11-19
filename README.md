@@ -1,4 +1,4 @@
-# azaas-platform-backend
+# azaas-platform-frontend
 
 ## Project setup
 ```

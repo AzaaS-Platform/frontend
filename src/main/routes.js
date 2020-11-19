@@ -23,8 +23,8 @@ export default [
             {path: 'users/:page', component: Users},
             {path: 'users', redirect: '/dashboard/users/1'},
             {path: 'settings', component: Settings},
-            {path: '*', component: NotFound},
-            {path: '', component: NotFound},
+            {path: '*', redirect: '/admin/error'},
+            {path: '', redirect: '/admin/error'},
         ]
     },
     {

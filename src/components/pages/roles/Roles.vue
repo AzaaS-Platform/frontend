@@ -12,14 +12,18 @@
                             </div>
                         </td>
                         <td class="mdl-data-table__cell--non-numeric">
-                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red"
-                                    @click="e => deleteClick(e, row.entity)">
+                            <button
+                                class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-red"
+                                @click="e => deleteClick(e, row.entity)">
                                 Delete
                             </button>
                         </td>
                     </router-link>
                 </template>
             </Table>
+            <div v-else-if="error" class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
+                <span :class="`color-text--red`">{{ error }}</span>
+            </div>
             <Loading v-else/>
         </TableContent>
         <MessageBox v-if="!!messageBox" :key="messageBoxKey" :message="messageBox.message" :type="messageBox.type"/>
@@ -27,26 +31,28 @@
 </template>
 
 <script>
-    import Table from "../../elements/table/Table.vue";
-    import TableContent from '../../elements/layout/TableContent.vue';
-    import Loading from '../../elements/Loading.vue';
-    import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
-    import Fetcher from '../../../main/connect/Fetcher.js';
-    import Utils from '../../../main/utils/Utils.js';
-    import MessageBox, {TYPE_DANGER, TYPE_SUCCESS} from '../../elements/MessageBox.vue';
+import Table from "../../elements/table/Table.vue";
+import TableContent from '../../elements/layout/TableContent.vue';
+import Loading from '../../elements/Loading.vue';
+import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
+import Fetcher from '../../../main/connect/Fetcher.js';
+import Utils from '../../../main/utils/Utils.js';
+import MessageBox, {TYPE_DANGER, TYPE_SUCCESS} from '../../elements/MessageBox.vue';
 
-    const ROLE_DELETED = 'Role deleted successfully';
+const ROLE_DELETED = 'Role deleted successfully';
 
-    export default {
-        name: "Roles",
-        components: {MessageBox, Loading, TableContent, Table},
-        mounted() {
-            this.loading = true;
-            Utils.handleRequests(this.$router, async() => {
-                await this.fetchRoles();
+export default {
+    name: "Roles",
+    components: {MessageBox, Loading, TableContent, Table},
+    mounted() {
+        this.loading = true;
+        Utils.handleRequests(this.$router, async () => {
+            await this.fetchRoles();
 
-                this.loading = false;
-            });
+            this.loading = false;
+        }).catch(e => {
+            this.error = e.message
+        });
         },
         beforeDestroy() {
             Fetcher.abortAll();
@@ -60,6 +66,7 @@
                     rows: [],
                 },
                 loading: true,
+                error: '',
                 messageBox: null,
                 messageBoxKey: 0,
             }

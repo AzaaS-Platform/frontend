@@ -5,9 +5,15 @@ export default class Token {
     }
 
     static extractUser(token) {
-        if(!token) return null;
+        if (!token) return null;
         const data = JSON.parse(atob(token.split('.')[1]));
         return data.payload.usr;
+    }
+
+    static extractIsAdmin(token) {
+        if (!token) return null;
+        const data = JSON.parse(atob(token.split('.')[1]));
+        return data.payload.adm;
     }
 
     static save(token) {

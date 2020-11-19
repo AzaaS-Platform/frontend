@@ -52,23 +52,23 @@
 </template>
 
 <script>
-    import Loading from '../../elements/Loading.vue';
-    import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
-    import Token from '../../../main/storage/Token.js';
-    import Client from '../../../main/storage/Client.js';
-    import Fetcher from '../../../main/connect/Fetcher.js';
+import Loading from '../../elements/Loading.vue';
+import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
+import Token from '../../../main/storage/Token.js';
+import Client from '../../../main/storage/Client.js';
+import Fetcher from '../../../main/connect/Fetcher.js';
 
-    export default {
-        name: "Login",
-        components: {Loading},
-        created() {
-            const token = Token.restore();
-            if(token && Token.checkExpiryTime(token)) {
-                this.$router.push('/dashboard/users');
-            }
-        },
-        beforeDestroy() {
-            Fetcher.abortAll();
+export default {
+    name: "Login",
+    components: {Loading},
+    created() {
+        const token = Token.restore();
+        if (token && Token.checkExpiryTime(token)) {
+            this.$router.push('/dashboard/users');
+        }
+    },
+    beforeDestroy() {
+        Fetcher.abortAll();
         },
         data() {
             let message = null;
@@ -102,7 +102,12 @@
 
                 try {
                     await ConnectorFactory.authenticate(this.client, this.login, this.password, this.token);
-                    this.$router.push('/dashboard/users');
+
+                    if (Token.extractIsAdmin(Token.restore())) {
+                        this.$router.push('/dashboard/users');
+                    } else {
+                        this.$router.push('/dashboard/settings');
+                    }
                 } catch(e) {
                     this.message = {
                         text: e.message,
