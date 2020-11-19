@@ -29,7 +29,7 @@
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
                                     <input class="mdl-textfield__input" type="password" id="token"
                                            v-model="token">
-                                    <label class="mdl-textfield__label" for="password">2FA code (if enabled)</label>
+                                    <label class="mdl-textfield__label" for="token">2FA code (if enabled)</label>
                                 </div>
                             </div>
                             <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone submit-cell">
@@ -57,6 +57,7 @@ import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
 import Token from '../../../main/storage/Token.js';
 import Client from '../../../main/storage/Client.js';
 import Fetcher from '../../../main/connect/Fetcher.js';
+import Utils from "@/main/utils/Utils.js";
 
 export default {
     name: "Login",
@@ -90,6 +91,7 @@ export default {
                 password: '',
                 token: '',
                 client: Client.restore() ?? '',
+                returnUrl: this.$route.query.returnUrl,
                 message,
             }
         },
@@ -101,12 +103,19 @@ export default {
                 this.loading = true;
 
                 try {
-                    await ConnectorFactory.authenticate(this.client, this.login, this.password, this.token);
-
-                    if (Token.extractIsAdmin(Token.restore())) {
-                        this.$router.push('/dashboard/users');
+                    if (this.returnUrl) {
+                        const response = await ConnectorFactory.authenticateWithRedirect(this.returnUrl, this.client, this.login, this.password, this.token);
+                        Utils.redirect(response.location, {
+                            token: response.token
+                        });
                     } else {
-                        this.$router.push('/dashboard/settings');
+                        await ConnectorFactory.authenticate(this.client, this.login, this.password, this.token);
+
+                        if (Token.extractIsAdmin(Token.restore())) {
+                            this.$router.push('/dashboard/users');
+                        } else {
+                            this.$router.push('/dashboard/settings');
+                        }
                     }
                 } catch(e) {
                     this.message = {

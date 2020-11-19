@@ -14,6 +14,14 @@ export default class ConnectorFactory {
         await ConnectorFactory.AUTHENTICATOR.authenticate(login, password, token);
     }
 
+    static async authenticateWithRedirect(returnUrl, client, login, password, token = undefined) {
+        return await Fetcher.Post(`${Server.API_BASE_URL}clients/${client}/token?returnUrl=${returnUrl}`, {}, {
+            username: login,
+            password,
+            token
+        });
+    }
+
     static async register(client, login, password) {
         await Fetcher.Post(`${Server.API_BASE_URL}clients`, {}, {
             name: client,
