@@ -37,13 +37,18 @@
                                 :removable="false"/>
                 </div>
             </div>
-            <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone mdl-typography--text-right">
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-light-blue"
-                        @click="submitForm">
+            <div
+                class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--4-col-phone mdl-typography--text-right">
+                <button
+                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button--colored-light-blue"
+                    @click="submitForm">
                     <i class="material-icons">assignment_returned</i>
                     Save
                 </button>
             </div>
+        </div>
+        <div v-else-if="error" class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
+            <span :class="`color-text--red`">{{ error }}</span>
         </div>
         <Loading v-else/>
         <MessageBox v-if="!!messageBox" :key="messageBoxKey" :message="messageBox.message" :type="messageBox.type"/>
@@ -51,22 +56,22 @@
 </template>
 
 <script>
-    import Loading from '../../elements/Loading.vue';
-    import SelectList from '../../elements/form/SelectList.vue';
-    import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
-    import Fetcher from '../../../main/connect/Fetcher.js';
-    import Utils from '../../../main/utils/Utils.js';
-    import MessageBox, {TYPE_DANGER, TYPE_SUCCESS} from '../../elements/MessageBox.vue';
+import Loading from '../../elements/Loading.vue';
+import SelectList from '../../elements/form/SelectList.vue';
+import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
+import Fetcher from '../../../main/connect/Fetcher.js';
+import Utils from '../../../main/utils/Utils.js';
+import MessageBox, {TYPE_DANGER, TYPE_SUCCESS} from '../../elements/MessageBox.vue';
 
-    const USER_MODIFIED = 'User modified successfully';
-    const USER_ADDED = 'User added successfully';
+const USER_MODIFIED = 'User modified successfully';
+const USER_ADDED = 'User added successfully';
 
-    export default {
-        name: "AddUser",
-        components: {MessageBox, SelectList, Loading},
-        props: {
-            user: {
-                type: Object,
+export default {
+    name: "AddUser",
+    components: {MessageBox, SelectList, Loading},
+    props: {
+        user: {
+            type: Object,
                 default: null
             },
             header: {
@@ -79,10 +84,12 @@
             componentHandler.upgradeDom();
 
             this.loading = true;
-            Utils.handleRequests(this.$router, async() => {
+            Utils.handleRequests(this.$router, async () => {
                 await this.fetchRoles();
 
                 this.loading = false;
+            }).catch(e => {
+                this.error = e.message
             });
         },
         beforeDestroy() {
@@ -95,6 +102,7 @@
                 selected: [],
                 mappedAllRoles: [],
                 loading: true,
+                error: '',
                 messageBox: null,
                 messageBoxKey: 0,
             }
@@ -102,7 +110,6 @@
         methods: {
             async submitForm(e) {
                 e.preventDefault();
-                // TODO validation
 
                 const usersConnector = ConnectorFactory.getConnector('users');
                 this.loading = true;

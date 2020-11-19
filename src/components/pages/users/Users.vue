@@ -2,13 +2,13 @@
     <div>
         <TableContent header="Users" add-link="/dashboard/add-user">
             <Table v-if="!loading" :headers="table.headers" :rows="table.rows">
-                <template #header="{header}">{{header}}</template>
+                <template #header="{header}">{{ header }}</template>
                 <template #row="{row}">
                     <router-link :to="`/dashboard/edit-user/${row.entity}`" tag="tr" class="cursor-pointer">
-                        <td class="mdl-data-table__cell--non-numeric">{{row.username}}</td>
+                        <td class="mdl-data-table__cell--non-numeric">{{ row.username }}</td>
                         <td class="mdl-data-table__cell--non-numeric">
                             <div v-for="group of row.groups" :key="group">
-                                {{roles.find(role => role.entity === group).name}}
+                                {{ roles.find(role => role.entity === group).name }}
                             </div>
                         </td>
                         <td class="mdl-data-table__cell--non-numeric">
@@ -21,6 +21,9 @@
                     </router-link>
                 </template>
             </Table>
+            <div v-else-if="error" class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
+                <span :class="`color-text--red`">{{ error }}</span>
+            </div>
             <Loading v-else/>
         </TableContent>
         <MessageBox v-if="!!messageBox" :key="messageBoxKey" :message="messageBox.message" :type="messageBox.type"/>
@@ -28,84 +31,87 @@
 </template>
 
 <script>
-    import Table from "../../elements/table/Table.vue";
-    import TableContent from '../../elements/layout/TableContent.vue';
-    import Loading from '../../elements/Loading.vue';
-    import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
-    import Fetcher from '../../../main/connect/Fetcher.js';
-    import Utils from '../../../main/utils/Utils.js';
-    import Token from '../../../main/storage/Token.js';
-    import MessageBox, {TYPE_DANGER, TYPE_SUCCESS} from '../../elements/MessageBox.vue';
+import Table from "../../elements/table/Table.vue";
+import TableContent from '../../elements/layout/TableContent.vue';
+import Loading from '../../elements/Loading.vue';
+import ConnectorFactory from '../../../main/connect/ConnectorFactory.js';
+import Fetcher from '../../../main/connect/Fetcher.js';
+import Utils from '../../../main/utils/Utils.js';
+import Token from '../../../main/storage/Token.js';
+import MessageBox, {TYPE_DANGER, TYPE_SUCCESS} from '../../elements/MessageBox.vue';
 
-    const USER_DELETED = 'User deleted successfully';
+const USER_DELETED = 'User deleted successfully';
 
-    export default {
-        name: "Users",
-        components: {MessageBox, Loading, TableContent, Table},
-        mounted() {
+export default {
+    name: "Users",
+    components: {MessageBox, Loading, TableContent, Table},
+    mounted() {
+        this.loading = true;
+        Utils.handleRequests(this.$router, async () => {
+            await this.fetchUsers();
+            await this.fetchRoles();
+
+            this.loading = false;
+        }).catch(e => {
+            this.error = e.message
+        });
+    },
+    beforeDestroy() {
+        Fetcher.abortAll();
+    },
+    data() {
+        return {
+            table: {
+                headers: [
+                    'Username', 'Roles', ''
+                ],
+                rows: [],
+            },
+            loading: true,
+            error: '',
+            roles: [],
+            currentUserEntity: Token.extractUser(Token.restore()),
+            messageBox: null,
+            messageBoxKey: 0,
+        }
+    },
+    methods: {
+        async deleteClick(e, entity) {
+            e.stopPropagation();
+
             this.loading = true;
-            Utils.handleRequests(this.$router, async() => {
-                await this.fetchUsers();
-                await this.fetchRoles();
+            try {
+                await Utils.handleRequests(this.$router, async () => {
+                    const usersConnector = ConnectorFactory.getConnector('users');
+                    await usersConnector.delete(entity);
+                    this.table.rows = this.table.rows.filter(user => user.entity !== entity);
+                });
 
-                this.loading = false;
-            });
-        },
-        beforeDestroy() {
-            Fetcher.abortAll();
-        },
-        data() {
-            return {
-                table: {
-                    headers: [
-                        'Username', 'Roles', ''
-                    ],
-                    rows: [],
-                },
-                loading: true,
-                roles: [],
-                currentUserEntity: Token.extractUser(Token.restore()),
-                messageBox: null,
-                messageBoxKey: 0,
+                this.messageBox = {
+                    message: USER_DELETED,
+                    type: TYPE_SUCCESS,
+                };
+            } catch (e) {
+                this.messageBox = {
+                    message: e.message,
+                    type: TYPE_DANGER,
+                };
             }
+            ++this.messageBoxKey;
+            this.loading = false;
         },
-        methods: {
-            async deleteClick(e, entity) {
-                e.stopPropagation();
 
-                this.loading = true;
-                try {
-                    await Utils.handleRequests(this.$router, async() => {
-                        const usersConnector = ConnectorFactory.getConnector('users');
-                        await usersConnector.delete(entity);
-                        this.table.rows = this.table.rows.filter(user => user.entity !== entity);
-                    });
+        async fetchUsers() {
+            const usersConnector = ConnectorFactory.getConnector('users');
+            this.table.rows = await usersConnector.getAll();
+        },
 
-                    this.messageBox = {
-                        message: USER_DELETED,
-                        type: TYPE_SUCCESS,
-                    };
-                } catch(e) {
-                    this.messageBox = {
-                        message: e.message,
-                        type: TYPE_DANGER,
-                    };
-                }
-                ++this.messageBoxKey;
-                this.loading = false;
-            },
-
-            async fetchUsers() {
-                const usersConnector = ConnectorFactory.getConnector('users');
-                this.table.rows = await usersConnector.getAll();
-            },
-
-            async fetchRoles() {
-                const rolesConnector = ConnectorFactory.getConnector('roles');
-                this.roles = await rolesConnector.getAll();
-            }
+        async fetchRoles() {
+            const rolesConnector = ConnectorFactory.getConnector('roles');
+            this.roles = await rolesConnector.getAll();
         }
     }
+}
 </script>
 
 <style scoped>

@@ -14,3 +14,11 @@
 .mdl-layout__content {
     z-index:inherit;
 }
+
+.no-drawer .mdl-layout__drawer-button {
+    display:none;
+}
+
+.no-drawer .mdl-layout__drawer {
+    display:none;
+}
