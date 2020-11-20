@@ -91,7 +91,7 @@ export default {
                 password: '',
                 token: '',
                 client: Client.restore() ?? '',
-                returnUrl: this.$route.query.returnUrl,
+                returnUrl: this.$route.query.returnUrl || new URLSearchParams(window.location.search).get('returnUrl'),
                 message,
             }
         },
