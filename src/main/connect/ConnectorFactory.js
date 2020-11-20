@@ -15,7 +15,9 @@ export default class ConnectorFactory {
     }
 
     static async authenticateWithRedirect(returnUrl, client, login, password, token = undefined) {
-        return await Fetcher.Post(`${Server.API_BASE_URL}clients/${client}/token?returnUrl=${returnUrl}`, {}, {
+        return await Fetcher.Post(`${Server.API_BASE_URL}token?returnUrl=${returnUrl}`, {
+            "x-azaas-client": client
+        }, {
             username: login,
             password,
             token
