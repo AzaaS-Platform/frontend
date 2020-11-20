@@ -13,7 +13,9 @@ export default class Authenticator {
     }
 
     async authenticate(username, password, token = undefined) {
-        this.token = (await Fetcher.Post(`${Server.API_BASE_URL}clients/${this.client}/token`, {}, {
+        this.token = (await Fetcher.Post(`${Server.API_BASE_URL}token`, {
+            "x-azaas-client": this.client
+        }, {
             username,
             password,
             token
@@ -31,7 +33,8 @@ export default class Authenticator {
         }
 
         return {
-            Authorization: `Bearer ${this.token}`
+            Authorization: `Bearer ${this.token}`,
+            "x-azaas-client": this.client
         };
     }
 
