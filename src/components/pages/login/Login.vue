@@ -14,7 +14,8 @@
                         <form v-show="!loading" @submit="submitLogin">
                             <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
-                                    <input class="mdl-textfield__input" type="text" id="client" v-model="client">
+                                    <input class="mdl-textfield__input" type="text" id="client" :disabled="clientUrlSet"
+                                           v-model="client">
                                     <label class="mdl-textfield__label" for="client">Client</label>
                                 </div>
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label full-size">
@@ -64,8 +65,12 @@ export default {
     components: {Loading},
     created() {
         const token = Token.restore();
-        if (token && Token.checkExpiryTime(token)) {
-            this.$router.push('/dashboard/users');
+        if (!this.returnUrl && token && Token.checkExpiryTime(token)) {
+            if (Token.extractIsAdmin(token)) {
+                this.$router.push('/dashboard/users');
+            } else {
+                this.$router.push('/dashboard/settings');
+            }
         }
     },
     beforeDestroy() {
@@ -78,20 +83,23 @@ export default {
                     text: atob(this.$route.query.error),
                     type: 'red',
                 };
-            } else if(this.$route.query.success) {
+            } else if (this.$route.query.success) {
                 message = {
                     text: atob(this.$route.query.success),
                     type: 'green',
                 };
             }
 
+            const clientUrl = this.$route.query.client || new URLSearchParams(window.location.search).get('client') || '';
+            const client = clientUrl || Client.restore() || '';
             return {
                 loading: false,
                 login: '',
                 password: '',
                 token: '',
-                client: Client.restore() ?? '',
+                client,
                 returnUrl: this.$route.query.returnUrl || new URLSearchParams(window.location.search).get('returnUrl'),
+                clientUrlSet: !!clientUrl,
                 message,
             }
         },
