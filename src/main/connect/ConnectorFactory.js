@@ -14,16 +14,6 @@ export default class ConnectorFactory {
         await ConnectorFactory.AUTHENTICATOR.authenticate(login, password, token);
     }
 
-    static async authenticateWithRedirect(returnUrl, client, login, password, token = undefined) {
-        return await Fetcher.Post(`${Server.API_BASE_URL}token?returnUrl=${returnUrl}`, {
-            "x-azaas-client": client
-        }, {
-            username: login,
-            password,
-            token
-        });
-    }
-
     static async register(client, login, password) {
         await Fetcher.Post(`${Server.API_BASE_URL}clients`, {}, {
             name: client,
@@ -47,6 +37,7 @@ export default class ConnectorFactory {
         ConnectorFactory.USERS_CONNECTOR = null;
         ConnectorFactory.GROUPS_CONNECTOR = null;
         ConnectorFactory.MFA_CONNECTOR = null;
+        ConnectorFactory.ALLOWED_URLS_CONNECTOR = null;
     }
 
     static getConnector(type) {
@@ -74,6 +65,11 @@ export default class ConnectorFactory {
                     ConnectorFactory.MFA_CONNECTOR = new Connector(`users/${Token.extractUser(Token.restore())}/mfa`, ConnectorFactory.AUTHENTICATOR);
                 }
                 return ConnectorFactory.MFA_CONNECTOR;
+            case "allowedUrls":
+                if(!ConnectorFactory.ALLOWED_URLS_CONNECTOR) {
+                    ConnectorFactory.ALLOWED_URLS_CONNECTOR = new Connector('allowedUrls', ConnectorFactory.AUTHENTICATOR);
+                }
+                return ConnectorFactory.ALLOWED_URLS_CONNECTOR;
             default:
                 throw new NoSuchResourceError('There is no REST API for this resource');
         }

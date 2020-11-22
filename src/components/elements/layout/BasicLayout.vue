@@ -8,6 +8,10 @@
         <main class="mdl-layout__content" :style="!showDrawer && {marginLeft: '0px'}">
             <router-view></router-view>
         </main>
+
+        <Modal ref="settingsModal">
+            <QRContent/>
+        </Modal>
     </div>
 </template>
 
@@ -15,13 +19,17 @@
 import Drawer from './Drawer.vue';
 import Header from './Header.vue';
 import Token from "@/main/storage/Token.js";
+import QRContent from '@/components/elements/layout/QRContent.vue';
+import Modal from '@/components/elements/Modal.vue';
 
 export default {
     name: "BasicLayout",
-    components: {Header, Drawer},
+    components: {Header, Drawer, QRContent, Modal},
     mounted() {
         // eslint-disable-next-line
         componentHandler.upgradeDom();
+
+        this.$root.$on('openSettingsModal', () => this.$refs.settingsModal.openModal());
     },
     updated() {
         this.showHeader = this.$route.matched[0].path !== '/admin';
