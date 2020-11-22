@@ -59,6 +59,7 @@ import Token from '../../../main/storage/Token.js';
 import Client from '../../../main/storage/Client.js';
 import Fetcher from '../../../main/connect/Fetcher.js';
 import Utils from "@/main/utils/Utils.js";
+import ApiHelper from '@/main/utils/ApiHelper.js';
 
 export default {
     name: "Login",
@@ -112,7 +113,7 @@ export default {
 
                 try {
                     if (this.returnUrl) {
-                        const response = await ConnectorFactory.authenticateWithRedirect(this.returnUrl, this.client, this.login, this.password, this.token);
+                        const response = await ApiHelper.authenticateWithRedirect(this.returnUrl, this.client, this.login, this.password, this.token);
                         Utils.redirect(response.location, {
                             token: response.token
                         });

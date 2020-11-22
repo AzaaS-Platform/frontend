@@ -44,7 +44,7 @@ export default class Fetcher {
             },
             signal: Fetcher.controller.signal,
         });
-        return await fetch(request);
+        return await Fetcher.parseResponse(await fetch(request));
     }
 
     static async Delete(path, headers) {
@@ -53,18 +53,26 @@ export default class Fetcher {
             headers,
             signal: Fetcher.controller.signal,
         });
-        return await fetch(request);
+        return await Fetcher.parseResponse(await fetch(request));
     }
 
     static async parseResponse(response) {
-        const data = await response.json();
-        if(data.statusCode >= 200 && data.statusCode < 300) {
-            return data.payload;
-        } else {
-            throw {
-                statusCode: data.statusCode,
-                message: data.message,
-            };
+        let data;
+        try {
+            data = await response.json();
+        } catch(e) {
+            return;
+        }
+
+        if(data.statusCode) {
+            if(data.statusCode >= 200 && data.statusCode < 300) {
+                return data.payload;
+            } else {
+                throw {
+                    statusCode: data.statusCode,
+                    message: data.message,
+                };
+            }
         }
     }
 
